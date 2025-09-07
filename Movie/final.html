@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineVerse | Movie Reviews & Suggestions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f1f1f1;
+        }
+
+        /* Frosted glass effect */
+        .frosted-glass {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom scrollbar for a more modern look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #eab308; /* yellow-500 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b; /* amber-500 */
+        }
+        
+        /* Custom styles for movie posters */
+        .movie-poster {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .movie-poster:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(234, 179, 8, 0.2);
+        }
+
+        /* Active nav link style */
+        .nav-link.active {
+            color: #eab308;
+        }
+        .nav-link.active::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #eab308;
+            margin-top: 2px;
+        }
+
+        /* Animation for modals and pages */
+        .page-enter { opacity: 0; transform: scale(0.95); }
+        .page-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
+        .page-exit { opacity: 1; transform: scale(1); }
+        .page-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 300ms, transform 300ms; }
+
+        /* Carousel Styles */
+        .carousel-slide {
+            transition: opacity 1.5s ease-in-out;
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center 25%; /* Changed from 'center' */
+        }
+        .carousel-slide.active { 
+            opacity: 1; 
+            animation: ken-burns 20s ease-in-out infinite alternate;
+        }
+        .carousel-slide:not(.active) { opacity: 0; }
+        
+        @keyframes ken-burns {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                transform: scale(1.1) translate(-2%, 2%);
+            }
+        }
+
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-indicator.active, .carousel-indicator:hover {
+            background-color: #eab308; /* yellow-500 */
+        }
+
+        .hero-text-animate {
+            animation: slide-up-fade-in 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes slide-up-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        #star-wars-page, #mcu-page, #dcu-page {
+            /* The background image styles have been removed from here */
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="frosted-glass fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="#home" class="text-3xl font-bold text-yellow-500 tracking-wider">CineVerse</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-lg font-medium hover:text-yellow-500 transition-colors">Home</a>
+                    <a href="#upcoming-releases" class="nav-link text-lg font-medium hover:text-yellow-500 transition-colors">Upcoming</a>
+                    <a href="#franchises" id="franchises-nav-link" class="nav-link text-lg font-medium hover:text-yellow-500 transition-colors cursor-pointer">Franchises</a>
+                    <a href="#anime-world" class="nav-link text-lg font-medium hover:text-yellow-500 transition-colors">Anime</a>
+                    <a href="#hollywood-blockbusters" class="nav-link text-lg font-medium hover:text-yellow-500 transition-colors">Hollywood</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden">
+                    <i data-lucide="menu" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+            <a href="#home" class="block py-2 text-center text-lg font-medium hover:text-yellow-500 transition-colors">Home</a>
+            <a href="#upcoming-releases" class="block py-2 text-center text-lg font-medium hover:text-yellow-500 transition-colors">Upcoming</a>
+            <a href="#franchises" id="mobile-franchises-nav-link" class="block py-2 text-center text-lg font-medium hover:text-yellow-500 transition-colors cursor-pointer">Franchises</a>
+            <a href="#anime-world" class="block py-2 text-center text-lg font-medium hover:text-yellow-500 transition-colors">Anime</a>
+            <a href="#hollywood-blockbusters" class="block py-2 text-center text-lg font-medium hover:text-yellow-500 transition-colors">Hollywood</a>
+            <a href="#bollywood-hits" class="block py-2 text-center text-lg font-medium hover:text-yellow-500 transition-colors">Bollywood</a>
+            <a href="#korean-cinema" class="block py-2 text-center text-lg font-medium hover:text-yellow-500 transition-colors">Korean Cinema</a>
+        </div>
+    </header>
+</br>
+</br>
+</br>
+
+
+    <!-- Hero Section -->
+        <section id="home" class="h-screen -mt-20 relative overflow-hidden">
+            <div id="hero-carousel" class="absolute inset-0">
+                <!-- Slides with background images will be injected here -->
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+            <div id="hero-carousel-content" class="relative h-full flex flex-col justify-end pb-20 md:pb-32 px-4 sm:px-8 lg:px-16 text-center md:text-left">
+                <!-- Slide content will be injected here -->
+            </div>
+            <div id="hero-carousel-indicators" class="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
+                <!-- Indicators will be injected here -->
+            </div>
+            <button id="hero-prev" class="absolute left-4 top-1/2 -translate-y-1/2 frosted-glass p-3 rounded-full hover:bg-yellow-500/50 transition-colors">
+                <i data-lucide="chevron-left" class="w-8 h-8"></i>
+            </button>
+            <button id="hero-next" class="absolute right-4 top-1/2 -translate-y-1/2 frosted-glass p-3 rounded-full hover:bg-yellow-500/50 transition-colors">
+                <i data-lucide="chevron-right" class="w-8 h-8"></i>
+            </button>
+        </section>
+
+    <main id="main-content" class="container mx-auto px-4 sm:px-6 lg:px-8 pt-20">
+        
+
+        <!-- Universe Icons Section -->
+        <section id="universes" class="py-16 text-center">
+            <h2 class="text-4xl sm:text-5xl font-bold mb-16">Explore Cinematic Universes</h2>
+            <div class="flex justify-center items-center gap-12 md:gap-20 flex-wrap">
+                 <button id="mcu-icon-btn" class="flex flex-col items-center gap-4 group transition-transform duration-300 hover:scale-105">
+                    <div class="w-36 h-36 rounded-full flex items-center justify-center bg-gray-800 group-hover:bg-red-600 transition-colors border-4 border-gray-700 shadow-lg">
+                        <span class="text-5xl font-bold text-white">MCU</span>
+                    </div>
+                    <span class="text-xl font-semibold group-hover:text-yellow-500 transition-colors">Marvel</span>
+                 </button>
+                 <button id="dcu-icon-btn" class="flex flex-col items-center gap-4 group transition-transform duration-300 hover:scale-105">
+                    <div class="w-36 h-36 rounded-full flex items-center justify-center bg-gray-800 group-hover:bg-blue-700 transition-colors border-4 border-gray-700 shadow-lg">
+                         <span class="text-5xl font-bold text-white">DCU</span>
+                    </div>
+                    <span class="text-xl font-semibold group-hover:text-yellow-500 transition-colors">DC</span>
+                 </button>
+                 <button id="star-wars-icon-btn" class="flex flex-col items-center gap-4 group transition-transform duration-300 hover:scale-105">
+                    <div class="w-36 h-36 rounded-full flex items-center justify-center bg-gray-800 group-hover:bg-yellow-600 transition-colors border-4 border-gray-700 shadow-lg">
+                         <i data-lucide="sparkles" class="w-16 h-16 text-white"></i>
+                    </div>
+                    <span class="text-xl font-semibold group-hover:text-yellow-500 transition-colors">Star Wars</span>
+                 </button>
+            </div>
+        </section>
+
+        <!-- Personal Suggestions Promo Section -->
+        <section id="personal-suggestions-promo" class="py-16 my-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">A Personal Touch</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Handpicked collections from our curators. Click a card to see their full list of recommendations.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Parsen's Suggestions Card -->
+                <button id="show-parsen-suggestions-btn" class="relative rounded-lg overflow-hidden group h-80 transform transition-transform duration-300 hover:scale-105 shadow-lg">
+                    <img src="prasen.jpg" alt="Parsen's Portrait" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 text-left">
+                        <h3 class="text-3xl font-bold text-white">Parsen</h3>
+                        <p class="text-yellow-500 font-semibold">Curator's Picks</p>
+                    </div>
+                </button>
+                <!-- Bonka's Suggestions Card -->
+                <button id="show-bonka-suggestions-btn" class="relative rounded-lg overflow-hidden group h-80 transform transition-transform duration-300 hover:scale-105 shadow-lg">
+                    <img src="bonka.jpg" alt="Bonka's Portrait" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 text-left">
+                        <h3 class="text-3xl font-bold text-white">Bonka</h3>
+                        <p class="text-yellow-500 font-semibold">Curator's Picks</p>
+                    </div>
+                </button>
+                <!-- Argha's Suggestions Card -->
+                <button id="show-argha-suggestions-btn" class="relative rounded-lg overflow-hidden group h-80 transform transition-transform duration-300 hover:scale-105 shadow-lg">
+                    <img src="argha.jpg" alt="Argha's Portrait" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 text-left">
+                        <h3 class="text-3xl font-bold text-white">Argha</h3>
+                        <p class="text-yellow-500 font-semibold">Curator's Picks</p>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- Dynamic Movie Sections -->
+        <div id="movie-sections" class="space-y-24 py-16">
+            <!-- Sections will be injected here by JavaScript -->
+        </div>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="mt-24 border-t border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-500">
+            <p>&copy; 2025 CineVerse. All Rights Reserved.</p>
+            <p class="mt-2 text-sm">Designed & Developed for a modern cinematic experience.</p>
+        </div>
+    </footer>
+
+
+    <!-- Movie Detail Modal -->
+    <div id="movie-modal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-80 hidden">
+        <div id="modal-content" class="frosted-glass rounded-2xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto relative page-enter">
+            <!-- Content will be injected by JavaScript -->
+        </div>
+    </div>
+    
+    <!-- MCU Page -->
+    <div id="mcu-page" class="fixed inset-0 z-50 bg-[#0a0a0a] hidden overflow-y-auto">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 page-enter relative">
+             <div class="flex justify-between items-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-500">Marvel Cinematic Universe</h1>
+                <button id="close-mcu-page-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x-circle" class="w-10 h-10"></i>
+                </button>
+            </div>
+            <div id="mcu-page-content" class="space-y-16">
+                <!-- MCU Phases will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Star Wars Page -->
+    <div id="star-wars-page" class="fixed inset-0 z-50 bg-[#0a0a0a] hidden overflow-y-auto">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 page-enter relative">
+             <div class="flex justify-between items-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-500">Star Wars Saga</h1>
+                <button id="close-star-wars-page-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x-circle" class="w-10 h-10"></i>
+                </button>
+            </div>
+            <div id="star-wars-page-content" class="space-y-16">
+                <!-- Star Wars Trilogies will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- DCU Page -->
+    <div id="dcu-page" class="fixed inset-0 z-50 bg-[#0a0a0a] hidden overflow-y-auto">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 page-enter relative">
+             <div class="flex justify-between items-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-500">DC Universe</h1>
+                <button id="close-dcu-page-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x-circle" class="w-10 h-10"></i>
+                </button>
+            </div>
+            <div id="dcu-page-content" class="space-y-16">
+                <!-- DCU content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Franchise Page -->
+    <div id="franchise-page" class="fixed inset-0 z-50 bg-[#0a0a0a] hidden overflow-y-auto">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 page-enter">
+             <div class="flex justify-between items-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-500">Franchise Collections</h1>
+                <button id="close-franchise-page-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x-circle" class="w-10 h-10"></i>
+                </button>
+            </div>
+            <div id="franchise-page-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <!-- Franchise icons will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Full List Page (for Suggestions and "See All") -->
+    <div id="full-list-page" class="fixed inset-0 z-50 bg-[#0a0a0a] hidden overflow-y-auto">
+        <div id="full-list-content" class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 page-enter">
+             <div class="flex justify-between items-center mb-12">
+                <h1 id="full-list-title" class="text-4xl md:text-5xl font-extrabold text-yellow-500">Full List</h1>
+                <button id="close-full-list-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x-circle" class="w-10 h-10"></i>
+                </button>
+            </div>
+            <div id="full-list-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DATA ---
+        const movies = [
+            // Upcoming
+            { id: 156, title: "Demon Slayer: Infinity Castle", year: 2025, category: "upcoming-releases", universe: "Demon Slayer", pg: "16+", rating: 0, poster: "https://lh4.googleusercontent.com/proxy/s3t53M23S6FT1frSeKGmn6ydxDOUwEFYmxcwuY0canoUTRe2aOY2U3jVd1W-Z2AEv_1u3N_sA5IugAvZYvWf8iQ1x9n1OgO2cSdHeQ-aVjWMudxue3OmTT1_-PLm6qiULLkAezHbhFqtLvCa6VocvvQQ3j2d_U4Ubmpo2w", heroImage: "https://4kwallpapers.com/images/wallpapers/demon-slayer-3840x2160-23615.jpg",  description: "The final arc of the Demon Slayer saga, where Tanjiro and the Hashira confront Muzan Kibutsuji in his infinite fortress." },
+            { id: 157, title: "Avatar: Fire and Ash", year: 2025, category: "upcoming-releases", universe: "Avatar", pg: "PG-13", rating: 0, poster: "https://m.media-amazon.com/images/M/MV5BZDY0MDA5ZWUtZWZjYS00ZDBkLWI0NGEtZDc2YzE3NDBkZmZkXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", heroImage: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/38/d2bb60aadf4762fd1208eb51d3f79e91_1280x720.webp?t=1753730551", description: "The third installment in the Avatar saga, exploring the world of Pandora further with the introduction of the 'Ash People', a volcanic race of Na'vi." },
+            { id: 158, title: "Kantara A Legend: Chapter 1", year: 2025, category: "upcoming-releases", universe: "Kantara", pg: "16+", rating: 0, poster: "https://m.media-amazon.com/images/M/MV5BNjkxZDRhYTYtODY1YS00MDlhLWJiMjgtOWUxNzlkYWY0M2ZhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", heroImage: "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202210/Kantara_1_1200x768.jpeg?VersionId=cg8qm90nqeCXkGwEzydAKHyIh7KNrmCW",  description: "A prequel to the blockbuster hit, this film delves into the origins of the legend and the history of the deity Panjurli." },
+            { id: 159, title: "Mortal Kombat II", year: 2025, category: "upcoming-releases", universe: "Mortal Kombat", pg: "18+", rating: 0, poster: "https://m.media-amazon.com/images/M/MV5BNDg4ZDQwMDctYWI4ZS00ZGIzLTliNDUtM2EzZjk0Y2U2Y2JjXkEyXkFqcGc@._V1_.jpg", heroImage: "https://static0.cbrimages.com/wordpress/wp-content/uploads/2022/11/mortal-kombat-movie-review_feature(1).jpg", description: "Following the events of the first film, Cole Young and the champions of Earthrealm must prepare for the next Mortal Kombat tournament to save their world from Shao Kahn." },
+            { id: 160, title: "Sisu: Road to Revenge", year: 2025, category: "upcoming-releases", universe: "Sisu", pg: "18+", rating: 0, poster: "https://media.outnow.ch/Movies/Bilder/2025/Sisu2/001.jpg", heroImage: "https://www.stage6films.com/sites/default/files/2025-08/Sisu%20Banner_1.jpg", description: "The continuing story of Aatami Korpi, the legendary Finnish commando, as he faces new enemies in his relentless pursuit of justice." },
+            
+            // Parsen's Suggestions
+
+             { id: 209, title: "Alice in Borderland", year: 2020, category: "parsen-suggestions", pg: "18+", rating: 8.2, seasons: 2, poster: "https://public-files.gumroad.com/t7q3z03th6zcjy5eeobzk3fox1mk",  description: "A group of bored delinquents are transported to a parallel dimension as part of a survival game." },
+            { id: 181, title: "Dunkirk", year: 2017, category: "parsen-suggestions", pg: "PG-13", rating: 7.5, poster: "https://m.media-amazon.com/images/M/MV5BZWU5ZjJkNTQtMzQwOS00ZGE4LWJkMWUtMGQ5YjdiM2FhYmRhXkEyXkFqcGc@._V1_.jpg",  description: "Allied soldiers from Belgium, the British Commonwealth and Empire, and France are surrounded by the German Army and evacuated during a fierce battle in World War II." },
+            { id: 210, title: "Army of the Dead", year: 2021, category: "parsen-suggestions", pg: "R", rating: 5.8, poster: "https://m.media-amazon.com/images/M/MV5BNjc0MDFjZmQtMWMxZi00YzY4LWI5N2EtOGQwM2IzZjRkYmY1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpghttps://m.media-amazon.com/images/M/MV5BNjc0MDFjZmQtMWMxZi00YzY4LWI5N2EtOGQwM2IzZjRkYmY1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "Following a zombie outbreak in Las Vegas, a group of mercenaries take the ultimate gamble, venturing into the quarantine zone to pull off the greatest heist ever attempted." },
+            { id: 211, title: "See", year: 2019, category: "parsen-suggestions", pg: "18+", rating: 7.6, seasons: 3, poster: "https://m.media-amazon.com/images/M/MV5BMDEwYTg3MWQtZTNmMi00ZjU1LTkwNWQtZDFmODQ5NjcwMDc2XkEyXkFqcGc@._V1_.jpg", description: "Far in a dystopian future, the human race has lost the sense of sight, and society has had to find new ways to interact, build, hunt, and to survive. All of that is challenged when a set of twins is born with sight." },
+            { id: 212, title: "Shōgun", year: 2024, category: "parsen-suggestions", pg: "18+", rating: 8.7, seasons: 1, poster: "https://posterspy.com/wp-content/uploads/2024/06/2-2.jpg",  description: "When a mysterious European ship is found marooned in a nearby fishing village, Lord Yoshii Toranaga discovers secrets that could tip the scales of power and devastate his enemies." },
+            { id: 220, title: "The Batman", year: 2022, category: "parsen-suggestions", pg: "PG-13", rating: 7.8, universe: "DCU", poster: "https://www.motionpictures.org/wp-content/uploads/2022/02/THBTMN_VERT_Riddler_Takeover_Batman_2764x4096_DOM.jpg", description: "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement." },
+            { id: 221, title: "F1", year: 2025, category: "parsen-suggestions", pg: "PG-13", rating: 7.8, poster: "https://m.media-amazon.com/images/M/MV5BZTYwYjJhNzYtY2ZiZS00ZmYxLWJkZjctYjRlNGIxYjI3ZTU0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", description: "sports action film starring Brad Pitt as a veteran Formula One driver who comes out of retirement to mentor a promising rookie." },
+            { id: 7, title: "Interstellar", year: 2014, category: "parsen-suggestions", pg: "PG-13", rating: 9.9, poster: "https://i.pinimg.com/736x/44/6c/51/446c519155720379f706e0eb040cb205.jpg",  description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival. A masterpiece of sci-fi cinema with breathtaking visuals and a powerful story." },
+            { id: 8, title: "Parasite", year: 2019, category: "parsen-suggestions", pg: "18+", rating: 9.7, poster: "https://m.media-amazon.com/images/M/MV5BYjk1Y2U4MjQtY2ZiNS00OWQyLWI3MmYtZWUwNmRjYWRiNWNhXkEyXkFqcGc@._V1_.jpg", description: "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan." },
+    
+            { id: 186, title: "Dune", year: 2021, category: "parsen-suggestions", pg: "PG-13", rating: 7.8, poster: "https://www.movieposters.com/cdn/shop/products/dunenew.jpg?v=1646940429", description: "A noble family becomes embroiled in a war for control over the galaxy's most valuable asset while its heir becomes troubled by visions of a dark future." },
+            { id: 189, title: "Dune: Part Two", year: 2024, category: "parsen-suggestions", pg: "PG-13", rating: 8.3, poster: "https://vice-press.com/cdn/shop/files/dune-part-two-movie-poster-matt-ferguson_ac86f8c9-f410-450c-805b-c4352aac4a55.jpg?v=1730814717&width=1024",  description: "Follow Paul Atreides as he unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family." },
+            { id: 110, title: "Zack Snyder's Justice League", year: 2021, category: "parsen-suggestions", universe: "DCU", pg: "R", rating: 8.3, poster: "https://image.tmdb.org/t/p/w500/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg",  description: "Determined to ensure Superman's ultimate sacrifice was not in vain, Bruce Wayne aligns forces with Diana Prince with plans to recruit a team of metahumans to protect the world from an approaching threat of catastrophic proportions." },
+            { id: 180, title: "Blade Runner 2049", year: 2017, category: "parsen-suggestions", pg: "R", rating: 7.5, poster: "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",  description: "Young Blade Runner K's discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who's been missing for thirty years." },
+           
+            { id: 38, title: "John Wick", year: 2014, category: "parsen-suggestions", pg: "R", rating: 7.4, poster: "https://www.tallengestore.com/cdn/shop/products/JohnWick-KeanuReeves-HollywoodEnglishActionMoviePoster-2_d2e65a82-e8e1-46f9-b5f0-7cbd47c1747c.jpg?v=1649071605",  description: "An ex-hitman comes out of retirement to track down the gangsters that took everything from him." },
+            { id: 39, title: "John Wick: Chapter 2", year: 2017, category: "parsen-suggestions", pg: "R", rating: 7.3, poster: "https://m.media-amazon.com/images/M/MV5BMjE2NDkxNTY2M15BMl5BanBnXkFtZTgwMDc2NzE0MTI@._V1_.jpg", description: "John Wick is forced back out of retirement by a former associate plotting to seize control of a shadowy international assassins' guild." },
+            { id: 40, title: "John Wick: Chapter 3 – Parabellum", year: 2019, category: "parsen-suggestions", pg: "R", rating: 7.4, poster: "https://image.tmdb.org/t/p/w500/ziEuG1essDuWuC5lpWUaw1uXY2O.jpg", description: "John Wick is on the run after killing a member of the international assassins' guild, and with a $14 million price tag on his head, he is the target of hit men and women everywhere." },
+            { id: 41, title: "John Wick: Chapter 4", year: 2023, category: "parsen-suggestions", pg: "R", rating: 7.9, poster: "https://m.media-amazon.com/images/I/81fk-N7tvbL._UF1000,1000_QL80_.jpg",  description: "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe." },
+           
+            
+            // Bonka's Suggestions
+            
+            { id: 213, title: "Haikyuu!!", year: 2014, category: "bonka-suggestions", pg: "PG-13", rating: 8.7, seasons: 4, poster: "https://m.media-amazon.com/images/I/718mXN3FI1L.jpg", description: "A chance event triggered Shouyou Hinata's love for volleyball. His club had no members, but somehow persevered and finally made it to its first and final regular match of middle school, where it was steamrolled by Tobio Kageyama, a superstar player known as 'King of the Court.'" },
+            { id: 61, title: "Captain America: The Winter Soldier", year: 2014, category: "bonka-suggestions", universe: "MCU", pg: "PG-13", rating: 7.7, poster: "https://posterspy.com/wp-content/uploads/2021/01/Winter_Soldier_Poster.jpg",  description: "As Steve Rogers struggles to embrace his role in the modern world, he teams up with a fellow Avenger and S.H.I.E.L.D. agent, Black Widow, to battle a new threat from history: the Winter Soldier." },
+            { id: 16, title: "Inception", year: 2010, category: "bonka-suggestions", pg: "13+", rating: 9.7, poster: "https://c8.alamy.com/comp/2JKYD0T/movie-poster-inception-2010-2JKYD0T.jpg", description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O." },
+            { id: 215, title: "Coco", year: 2017, category: "bonka-suggestions", pg: "PG", rating: 8.4, poster: "https://m.media-amazon.com/images/I/71+r-xMZd-L._UF894,1000_QL80_.jpg", description: "Aspiring musician Miguel, confronted with his family's ancestral ban on music, enters the Land of the Dead to find his great-great-grandfather, a legendary singer." },
+            { id: 136, title: "3 Idiots", year: 2009, category: "bonka-suggestions", pg: "PG-13", rating: 8.4, poster: "https://www.tallengestore.com/cdn/shop/products/7381745172660A_aa3dbd6e-f6eb-4f9a-94a5-023a04feea59.jpg?v=1683929428",  description: "Two friends are searching for their long lost companion. They revisit their college days and recall the memories of their friend who inspired them to think differently, even as the rest of the world called them 'idiots'." },
+            { id: 216, title: "Goblin", year: 2016, category: "bonka-suggestions", pg: "16+", rating: 8.6, seasons: 1, poster: "https://m.media-amazon.com/images/M/MV5BNWIyNTA3MmItNzY5ZS00NmZhLThjMWYtZjIxYzllZWU5YWIzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "A cursed immortal goblin works as a grim reaper and guides souls to the afterlife. He needs a human bride to end his curse, but things get complicated when he falls in love with her." },
+            { id: 221, title: "F1", year: 2025, category: "bonka-suggestions", pg: "PG-13", rating: 7.8, poster: "https://m.media-amazon.com/images/M/MV5BZTYwYjJhNzYtY2ZiZS00ZmYxLWJkZjctYjRlNGIxYjI3ZTU0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", description: "sports action film starring Brad Pitt as a veteran Formula One driver who comes out of retirement to mentor a promising rookie." },
+            // Argha's Suggestions
+           
+            { id: 123, title: "A Silent Voice", year: 2016, category: "argha-suggestions", pg: "PG-13", rating: 8.3, poster: "https://m.media-amazon.com/images/I/514ePr6WZ6L._UF1000,1000_QL80_.jpg", description: "A young man is ostracized by his classmates after he bullies a deaf girl to the point where she moves away. Years later, he sets off on a path for redemption." },
+            { id: 217, title: "Baahubali: The Beginning", year: 2015, category: "argha-suggestions", pg: "PG-13", rating: 8.0, poster: "https://m.media-amazon.com/images/M/MV5BM2YxZThhZmEtYzM0Yi00OWYxLWI4NGYtM2Y2ZDNmOGE0ZWQzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", description: "In the kingdom of Mahishmati, a young man raised in a remote village discovers his royal heritage and must confront a tyrannical ruler and his own past." },
+            { id: 218, title: "Baahubali 2: The Conclusion", year: 2017, category: "argha-suggestions", pg: "PG-13", rating: 8.2, poster: "https://static.abplive.com/wp-content/uploads/2017/04/13164602/Baahubali-lead.jpg?impolicy=abp_cdn&imwidth=640", description: "When Shiva, the son of Baahubali, learns about his heritage, he begins to look for answers. His story is juxtaposed with past events that unfolded in the Mahishmati Kingdom." },
+            { id: 219, title: "The Amazing Spider-Man 2", year: 2014, category: "argha-suggestions", pg: "PG-13", rating: 6.6, poster: "https://image.tmdb.org/t/p/original/h4NC0pkqvDX7Q6TI3PyW4NJKEYi.jpg",  description: "When New York is put under siege by Oscorp, it is up to Spider-Man to save the city he swore to protect as well as his loved ones." },
+            { id: 126, title: "The Shawshank Redemption", year: 1994, category: "argha-suggestions", pg: "R", rating: 8.7, poster: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg", description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency." },
+            { id: 220, title: "The Batman", year: 2022, category: "argha-suggestions", pg: "PG-13", rating: 7.8, universe: "DCU", poster: "https://www.motionpictures.org/wp-content/uploads/2022/02/THBTMN_VERT_Riddler_Takeover_Batman_2764x4096_DOM.jpg",  description: "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement." },
+            { id: 221, title: "F1", year: 2025, category: "argha-suggestions", pg: "PG-13", rating: 7.8, poster: "https://m.media-amazon.com/images/M/MV5BZTYwYjJhNzYtY2ZiZS00ZmYxLWJkZjctYjRlNGIxYjI3ZTU0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "sports action film starring Brad Pitt as a veteran Formula One driver who comes out of retirement to mentor a promising rookie." },
+          
+             // Anime World
+            { id: 169, title: "One Piece", year: 1999, category: "anime-world", pg: "13+", rating: 8.9, seasons: 21, poster: "https://i.pinimg.com/736x/0c/06/b2/0c06b2b293ba0dbb1cd195b17755b622.jpg",  description: "Follows the adventures of Monkey D. Luffy and his pirate crew in order to find the greatest treasure ever left by the legendary Pirate, Gold Roger: the famous 'One Piece'." },
+            { id: 33, title: "Attack on Titan", year: 2013, category: "anime-world", pg: "18+", rating: 9.9, seasons: 4, poster: "https://image.tmdb.org/t/p/w500/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg", description: "When man-eating Titans first appeared 100 years ago, humans found safety behind massive walls. But their safety is threatened when a colossal Titan smashes through the barriers, causing a flood of giants." },
+            { id: 32, title: "Your Name", year: 2016, category: "anime-world", pg: "PG", rating: 9.8, poster: "https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg", description: "Two teenagers share a profound, magical connection upon discovering they are swapping bodies. Things become even more complicated when they decide to meet in person." },
+            { id: 34, title: "Death Note", year: 2006, category: "anime-world", pg: "16+", rating: 9.8, seasons: 1, poster: "https://moviepostermexico.com/cdn/shop/products/descarga_7e491689-ffdb-4761-bbdc-8886d30d35c0_669x.jpg?v=1585672305",  description: "An intelligent high school student goes on a secret crusade to eliminate criminals from the world after discovering a notebook that can kill anyone whose name is written in it." },
+            { id: 125, title: "Demon Slayer: Mugen Train", year: 2020, category: "anime-world", pg: "R", rating: 8.2, poster: "https://image.tmdb.org/t/p/w500/h8Rb9gBr48ODIwYUttZNYeMWeUU.jpg",  description: "Tanjiro Kamado, joined with Inosuke Hashibira, a boy raised by boars who wears a boar's head, and Zenitsu Agatsuma, a scared boy who reveals his true power when he sleeps, boards the Infinity Train on a new mission with the Flame Hashira, Kyojuro Rengoku." },
+            { id: 31, title: "Akira", year: 1988, category: "anime-world", pg: "R", rating: 9.7, poster: "https://filmartgallery.com/cdn/shop/files/Akira-Vintage-Movie-Poster-Original_62ed0faa.jpg?v=1741765333", description: "A secret military project endangers Neo-Tokyo when it turns a biker gang member into a rampaging psychic psychopath who can only be stopped by two teenagers and a group of psychics." },
+            { id: 9, title: "Spirited Away", year: 2001, category: "anime-world", pg: "PG", rating: 9.6, poster: "https://www.tallengestore.com/cdn/shop/products/SpiritedAway-Miyazaki-StudioGhibliJapanaeseAnimatedMoviePoster_ae518415-8719-466e-90d4-630ea877d657.jpg?v=1642160565",  description: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts." },
+            { id: 163, title: "Fullmetal Alchemist: Brotherhood", year: 2009, category: "anime-world", pg: "16+", rating: 9.1, seasons: 1, poster: "https://i.pinimg.com/564x/02/72/ab/0272abc879de7e6516943a31c0109313.jpg", description: "Two brothers search for the Philosopher's Stone after an attempt to revive their deceased mother goes awry and leaves them in damaged physical forms." },
+            { id: 161, title: "Cowboy Bebop", year: 1998, category: "anime-world", pg: "16+", rating: 8.9, seasons: 1, poster: "https://m.media-amazon.com/images/M/MV5BM2VhZjk2MWMtZjc2OC00YzA4LWI0NzAtZGQ1YjVkOTk5YzVlXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "The futuristic misadventures and tragedies of an easygoing bounty hunter and his partners." },
+            { id: 162, title: "Neon Genesis Evangelion", year: 1995, category: "anime-world", pg: "16+", rating: 8.6, seasons: 1, poster: "https://ih1.redbubble.net/image.2511743488.4372/flat,750x,075,f-pad,750x1000,f8f8f8.jpg",  description: "A teenage boy finds himself recruited as a member of an elite team of pilots by his father." },
+            { id: 121, title: "Grave of the Fireflies", year: 1988, category: "anime-world", pg: "NR", rating: 8.5, poster: "https://www.tallengestore.com/cdn/shop/products/GraveOfTheFireflies-StudioGhibliJapanaeseAnimatedMoviePoster_grande.jpg?v=1641974603",  description: "A devastating meditation on the human cost of war, this animated tale follows Seita, a teenager charged with the care of his younger sister, Setsuko, after an American firebombing during World War II separates them from their parents." },
+            { id: 164, title: "Hunter x Hunter", year: 2011, category: "anime-world", pg: "16+", rating: 9.0, seasons: 1, poster: "https://i.pinimg.com/564x/26/f1/cd/26f1cd042955416c1bbee070ecab3aa0.jpg",  description: "Gon Freecss aspires to become a Hunter, an exceptional being capable of greatness. With his friends and his potential, he seeks for his father who left him when he was younger." },
+            { id: 165, title: "Vinland Saga", year: 2019, category: "anime-world", pg: "18+", rating: 8.7, seasons: 2, poster: "https://m.media-amazon.com/images/I/81rPC0owmrL._UF1000,1000_QL80_.jpg",  description: "A young man named Thorfinn finds himself in a quest for revenge against the man who murdered his father." },
+            { id: 120, title: "Princess Mononoke", year: 1997, category: "anime-world", pg: "PG-13", rating: 8.3, poster: "https://www.tallengestore.com/cdn/shop/products/PrincessMononoke-StudioGhibliJapanaeseAnimatedMoviePoster_7ffbd668-7bf0-4a03-9934-da7d1fa2ffed.jpg?v=1642160523", trailerId: "4OiMOHrd5wQ", description: "On a journey to find the cure for a Tatarigami's curse, Ashitaka finds himself in the middle of a war between the forest gods and Tatara, a mining colony. In this quest he also meets San, the Mononoke Hime." },
+            { id: 123, title: "A Silent Voice", year: 2016, category: "anime-world", pg: "PG-13", rating: 8.3, poster: "https://m.media-amazon.com/images/I/514ePr6WZ6L._UF1000,1000_QL80_.jpg", description: "A young man is ostracized by his classmates after he bullies a deaf girl to the point where she moves away. Years later, he sets off on a path for redemption." },
+            { id: 166, title: "Perfect Blue", year: 1997, category: "anime-world", pg: "18+", rating: 8.3, poster: "https://m.media-amazon.com/images/M/MV5BMzAwNDIzMzEtZDZkNC00ZDQ4LTk3ZDMtZjVhMTU2YzgzZTZiXkEyXkFqcGc@._V1_.jpg", description: "A retired pop singer turned actress's sense of reality is shaken when she is stalked by an obsessed fan and seemingly stalked by a ghost of her past." },
+            { id: 119, title: "My Neighbor Totoro", year: 1988, category: "anime-world", pg: "G", rating: 8.1, poster: "https://rukminim2.flixcart.com/image/704/844/xif0q/poster/u/q/l/medium-studio-ghibli-spirited-away-my-neighbor-totoro-totoro-original-imagnzdggnxtzfyp.jpeg?q=20&crop=false",  description: "Two sisters move to the country with their father in order to be closer to their hospitalized mother, and discover the surrounding trees are inhabited by magical spirits." },
+            { id: 122, title: "Ghost in the Shell", year: 1995, category: "anime-world", pg: "R", rating: 7.9, poster: "https://image.tmdb.org/t/p/original/j3N1XeU7ayrkSdsJQlKUpcQKcL1.jpg",  description: "In the year 2029, a female cyborg cop and her partner hunt a mysterious and powerful hacker known as the Puppet Master." },
+            { id: 124, title: "Jujutsu Kaisen 0", year: 2021, category: "anime-world", pg: "PG-13", rating: 7.8, poster: "https://m.media-amazon.com/images/M/MV5BMzNhZTdmNDYtNTA0NC00MmNmLWIzYjUtNjg5NzNlYWQ0N2E5XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "Yuta Okkotsu, a high schooler who gains control of an extremely powerful Cursed Spirit, is enrolled by the sorcerers of Jujutsu High in order to help him control his power and keep an eye on him." },
+
+            // Hollywood
+            { id: 176, title: "Mad Max: Fury Road", year: 2015, category: "hollywood-blockbusters", pg: "R", rating: 7.6, poster: "https://image.tmdb.org/t/p/w500/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg",  description: "In a post-apocalyptic wasteland, a woman rebels against a tyrannical ruler in search for her homeland with the help of a group of female prisoners, a psychotic worshiper, and a drifter named Max." },
+            { id: 180, title: "Blade Runner 2049", year: 2017, category: "hollywood-blockbusters", pg: "R", rating: 7.5, poster: "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",  description: "Young Blade Runner K's discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who's been missing for thirty years." },
+            { id: 184, title: "Joker", year: 2019, category: "hollywood-blockbusters", pg: "R", rating: 8.2, poster: "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",  description: "A mentally troubled comedian embarks on a downward spiral that leads to the creation of an iconic villain." },
+            { id: 129, title: "Titanic", year: 1997, category: "hollywood-blockbusters", pg: "PG-13", rating: 7.9, poster: "https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",  description: "A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic." },
+            { id: 131, title: "Gladiator", year: 2000, category: "hollywood-blockbusters", pg: "R", rating: 8.2, poster: "https://m.media-amazon.com/images/I/71bFUkGfQ6L._UF1000,1000_QL80_.jpg",  description: "A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery." },
+            { id: 126, title: "The Shawshank Redemption", year: 1994, category: "hollywood-blockbusters", pg: "R", rating: 8.7, poster: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",  description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency." },
+            { id: 170, title: "Inception", year: 2010, category: "hollywood-blockbusters", pg: "PG-13", rating: 8.4, poster: "https://c8.alamy.com/comp/2JKYD0T/movie-poster-inception-2010-2JKYD0T.jpg", description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O." },
+            { id: 172, title: "Django Unchained", year: 2012, category: "hollywood-blockbusters", pg: "R", rating: 8.2, poster: "https://www.tallengestore.com/cdn/shop/products/Hollywood_Movie_Poster_II_-_Django_Unchained_d3a50e92-0365-4905-b133-100f7a110f34.jpg?v=1569991193",  description: "With the help of a German bounty-hunter, a freed slave sets out to rescue his wife from a brutal plantation-owner in Mississippi." },
+            { id: 173, title: "The Wolf of Wall Street", year: 2013, category: "hollywood-blockbusters", pg: "R", rating: 8.0, poster: "https://www.tallengestore.com/cdn/shop/products/Martin_Scorsese_Movie_Poster_-_The_Wolf_Of_Wall_Street_-_Leonardo_DiCaprio_-_Tallenge_Hollywood_Poster_Collection_43ca408c-1f7b-47eb-862d-d17d37fa7832.jpg?v=1569314553",  description: "Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker living the high life to his fall involving crime, corruption and the federal government." },
+            { id: 175, title: "Whiplash", year: 2014, category: "hollywood-blockbusters", pg: "R", rating: 8.4, poster: "https://image.tmdb.org/t/p/w500/7fn624j5lj3xTme2SgiLCeuedmO.jpg",  description: "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential." },
+            { id: 178, title: "La La Land", year: 2016, category: "hollywood-blockbusters", pg: "PG-13", rating: 7.9, poster: "https://m.media-amazon.com/images/I/81j4bDPgXQL._UF894,1000_QL80_.jpg",  description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future." },
+            { id: 179, title: "Arrival", year: 2016, category: "hollywood-blockbusters", pg: "PG-13", rating: 7.6, poster: "https://m.media-amazon.com/images/M/MV5BMTExMzU0ODcxNDheQTJeQWpwZ15BbWU4MDE1OTI4MzAy._V1_.jpg",  description: "A linguist works with the military to communicate with alien lifeforms after twelve mysterious spacecraft appear around the world." },
+            { id: 181, title: "Dunkirk", year: 2017, category: "hollywood-blockbusters", pg: "PG-13", rating: 7.5, poster: "https://m.media-amazon.com/images/M/MV5BZWU5ZjJkNTQtMzQwOS00ZGE4LWJkMWUtMGQ5YjdiM2FhYmRhXkEyXkFqcGc@._V1_.jpg",  description: "Allied soldiers from Belgium, the British Commonwealth and Empire, and France are surrounded by the German Army and evacuated during a fierce battle in World War II." },
+            { id: 182, title: "Get Out", year: 2017, category: "hollywood-blockbusters", pg: "R", rating: 7.6, poster: "https://m.media-amazon.com/images/M/MV5BMjUxMDQwNjcyNl5BMl5BanBnXkFtZTgwNzcwMzc0MTI@._V1_.jpg",  description: "A young African-American visits his white girlfriend's parents for the weekend, where his simmering uneasiness about their reception of him eventually reaches a boiling point." },
+            { id: 183, title: "Spider-Man: Into the Spider-Verse", year: 2018, category: "hollywood-blockbusters", pg: "PG", rating: 8.4, poster: "https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",  description: "Teen Miles Morales becomes the Spider-Man of his universe, and must join with five spider-powered individuals from other dimensions to stop a threat for all realities." },
+            { id: 185, title: "1917", year: 2019, category: "hollywood-blockbusters", pg: "R", rating: 7.9, poster: "https://www.tallengestore.com/cdn/shop/products/1917_-_Sam_Mendes_-_Hollywood_War_Film_Classic_English_Movie_Poster.jpg?v=1582705166",  description: "April 6th, 1917. As a regiment assembles to wage war deep in enemy territory, two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from walking straight into a deadly trap." },
+            { id: 186, title: "Dune", year: 2021, category: "hollywood-blockbusters", pg: "PG-13", rating: 7.8, poster: "https://www.movieposters.com/cdn/shop/products/dunenew.jpg?v=1646940429",  description: "A noble family becomes embroiled in a war for control over the galaxy's most valuable asset while its heir becomes troubled by visions of a dark future." },
+            { id: 187, title: "Top Gun: Maverick", year: 2022, category: "hollywood-blockbusters", pg: "PG-13", rating: 8.3, poster: "https://www.tallengestore.com/cdn/shop/products/TopGunMaverick-TomCruise-HollywoodMoviePoster_286944e9-5e56-4593-ab56-e31c96d3caf0.jpg?v=1673605664",  description: "After more than thirty years of service as one of the Navy's top aviators, Pete Mitchell is where he belongs, pushing the envelope as a courageous test pilot and dodging the advancement in rank that would ground him." },
+            { id: 188, title: "Oppenheimer", year: 2023, category: "hollywood-blockbusters", pg: "R", rating: 8.6, poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", description: "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb." },
+            { id: 189, title: "Dune: Part Two", year: 2024, category: "hollywood-blockbusters", pg: "PG-13", rating: 8.3, poster: "https://vice-press.com/cdn/shop/files/dune-part-two-movie-poster-matt-ferguson_ac86f8c9-f410-450c-805b-c4352aac4a55.jpg?v=1730814717&width=1024",  description: "Follow Paul Atreides as he unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family." },
+            { id: 127, title: "Forrest Gump", year: 1994, category: "hollywood-blockbusters", pg: "PG-13", rating: 8.5, poster: "https://image.tmdb.org/t/p/original/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",  description: "The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart." },
+            { id: 128, title: "Avatar", year: 2009, category: "hollywood-blockbusters", pg: "PG-13", rating: 7.5, poster: "https://i.pinimg.com/736x/f3/f0/4a/f3f04a485eaad60915d70bb3df8e6440.jpg",  description: "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting the world he feels is his home." },
+            { id: 130, title: "Jurassic Park", year: 1993, category: "hollywood-blockbusters", pg: "PG-13", rating: 7.9, poster: "https://image.tmdb.org/t/p/w500/oU7Oq2kFAAlGqbU4VoAE36g4hoI.jpg",  description: "A pragmatic paleontologist visiting an almost complete theme park is tasked with protecting a couple of kids after a power failure causes the park's cloned dinosaurs to run loose." },
+            { id: 132, title: "Saving Private Ryan", year: 1998, category: "hollywood-blockbusters", pg: "R", rating: 8.2, poster: "https://image.tmdb.org/t/p/w500/1wY4psJ5NVEhCuOYROwLH2XExM2.jpg",  description: "Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose brothers have been killed in action." },
+            { id: 133, title: "Back to the Future", year: 1985, category: "hollywood-blockbusters", pg: "PG", rating: 8.3, poster: "https://image.tmdb.org/t/p/w500/fNOH9f1aA7XRTzl1sAOx9iF553Q.jpg",  description: "Marty McFly, a 17-year-old high school student, is accidentally sent thirty years into the past in a time-traveling DeLorean invented by his close friend, the eccentric scientist Doc Brown." },
+            { id: 134, title: "The Silence of the Lambs", year: 1991, category: "hollywood-blockbusters", pg: "R", rating: 8.3, poster: "https://m.media-amazon.com/images/I/71-cvYYOTKL._UF894,1000_QL80_.jpg",  description: "A young F.B.I. cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer, a madman who skins his victims." },
+            { id: 135, title: "The Green Mile", year: 1999, category: "hollywood-blockbusters", pg: "R", rating: 8.5, poster: "https://image.tmdb.org/t/p/w500/velWPhVMQeQKcxggNEU8YmIo52R.jpg", description: "The lives of guards on Death Row are affected by one of their charges: a black man accused of child murder and rape, yet who has a mysterious gift." },
+
+            // Bollywood
+            { id: 136, title: "3 Idiots", year: 2009, category: "bollywood-hits", pg: "PG-13", rating: 8.4, poster: "https://www.tallengestore.com/cdn/shop/products/7381745172660A_aa3dbd6e-f6eb-4f9a-94a5-023a04feea59.jpg?v=1683929428",  description: "Two friends are searching for their long lost companion. They revisit their college days and recall the memories of their friend who inspired them to think differently, even as the rest of the world called them 'idiots'." },
+            { id: 137, title: "Lagaan", year: 2001, category: "bollywood-hits", pg: "PG", rating: 8.1, poster: "https://www.tallengestore.com/cdn/shop/products/7381744713908A.jpg?v=1683929377",  description: "The people of a small village in Victorian India stake their future on a game of cricket against their ruthless British rulers." },
+            { id: 138, title: "Gangs of Wasseypur", year: 2012, category: "bollywood-hits", pg: "R", rating: 8.2, poster: "https://www.tallengestore.com/cdn/shop/products/Gangs_Of_Wasseypur_-_Bollywood_Cult_Classic_Hindi_Movie_Poster_8a6323e6-0199-4d1e-9d8f-85a0b2369430.jpg?v=1570245960", description: "A clash between Sultan and Shahid Khan leads to the expulsion of Khan from Wasseypur, and a bloody, multi-generational feud follows." },
+            { id: 139, title: "Barfi!", year: 2012, category: "bollywood-hits", pg: "PG", rating: 8.1, poster: "https://m.media-amazon.com/images/M/MV5BMTQzMTEyODY2Ml5BMl5BanBnXkFtZTgwMjA0MDUyMjE@._V1_FMjpg_UX1000_.jpg",  description: "Three young people learn that love can neither be defined nor contained by society's norms of normal and abnormal." },
+            { id: 140, title: "Queen", year: 2013, category: "bollywood-hits", pg: "PG-13", rating: 8.2, poster: "https://images.filmibeat.com/ph-big/2014/02/queen-poster_139291112600.jpg", description: "A Delhi girl from a traditional family sets out on a solo honeymoon after her marriage gets canceled." },
+            { id: 141, title: "Andhadhun", year: 2018, category: "bollywood-hits", pg: "PG-13", rating: 8.2, poster: "https://m.media-amazon.com/images/M/MV5BMjZiYTNkNjUtNzI3MC00YWJmLTljM2QtNTI3MTU3ODYzNWFjXkEyXkFqcGc@._V1_.jpg",  description: "A series of mysterious events change the life of a blind pianist, who must now report a crime that he should technically know nothing of." },
+            { id: 142, title: "Bajrangi Bhaijaan", year: 2015, category: "bollywood-hits", pg: "PG-13", rating: 8.0, poster: "https://i.pinimg.com/736x/45/cb/4a/45cb4a8d3dd51482b503551f42b4005f.jpg",  description: "An Indian man with a magnanimous heart takes a young mute Pakistani girl back to her homeland to reunite her with her family." },
+            { id: 143, title: "My Name Is Khan", year: 2010, category: "bollywood-hits", pg: "PG-13", rating: 8.0, poster: "https://i.pinimg.com/736x/12/e2/08/12e208c32bf31f776d95e500fdbec36d.jpg", description: "An Indian Muslim man with Asperger's syndrome takes a challenge to speak to the President of the United States, and embarks on a cross-country journey." },
+            { id: 144, title: "Zindagi Na Milegi Dobara", year: 2011, category: "bollywood-hits", pg: "PG-13", rating: 8.1, poster: "https://m.media-amazon.com/images/M/MV5BOGIzYzg5NzItNDRkYS00NmIzLTk3NzQtZWYwY2VlZDhiYWQ4XkEyXkFqcGc@._V1_.jpg",  description: "Three friends decide to turn their fantasy vacation into reality after one of their number becomes engaged." },
+            { id: 145, title: "Taare Zameen Par", year: 2007, category: "bollywood-hits", pg: "PG", rating: 8.4, poster: "https://cdn.cinematerial.com/p/297x/preabpt7/taare-zameen-par-indian-movie-poster-md.jpg?v=1456255125",  description: "An eight-year-old boy is thought to be a lazy trouble-maker, until the new art teacher has the patience and compassion to discover the real problem behind his struggles in school." },
+
+            // Korean Cinema
+            { id: 146, title: "Train to Busan", year: 2016, category: "korean-cinema", pg: "R", rating: 7.6, poster: "https://image.tmdb.org/t/p/original/xKWbNG4WQBSrt7sk1ksfgSqzJXF.jpg", description: "While a zombie virus breaks out in South Korea, passengers struggle to survive on the train from Seoul to Busan." },
+            { id: 147, title: "The Handmaiden", year: 2016, category: "korean-cinema", pg: "NC-17", rating: 8.1, poster: "https://m.media-amazon.com/images/M/MV5BOTllZDI1OGItOGUxNS00OGZhLWIzMjAtYzllZTY1YTA0ZmYwXkEyXkFqcGc@._V1_.jpg",  description: "A woman is hired as a handmaiden to a Japanese heiress but secretly she is involved in a plot to defraud her." },
+            { id: 148, title: "Memories of Murder", year: 2003, category: "korean-cinema", pg: "R", rating: 8.1, poster: "https://m.media-amazon.com/images/M/MV5BYmRjOWE5NmMtYTdkYS00ODFlLWJiMTMtYzE2NDZlZjlkZDQ0XkEyXkFqcGc@._V1_.jpg", description: "In a small Korean province in 1986, two detectives struggle with the case of multiple young women being found raped and murdered by an unknown culprit." },
+            { id: 149, title: "A Taxi Driver", year: 2017, category: "korean-cinema", pg: "NR", rating: 8.0, poster: "https://m.media-amazon.com/images/M/MV5BNjliN2VmMmQtM2FlMS00MmY2LWJlYzAtZDIzNjE1Y2I1N2I4XkEyXkFqcGc@._V1_.jpg",  description: "A taxi driver from Seoul gets hired by a foreign journalist who wants to go to the city of Gwangju for a day. They arrive to find a city under siege by the military government." },
+            { id: 150, title: "The Wailing", year: 2016, category: "korean-cinema", pg: "R", rating: 7.4, poster: "https://m.media-amazon.com/images/M/MV5BODkwMTgxNjA2NF5BMl5BanBnXkFtZTgwMDc0OTcwOTE@._V1_.jpg",  description: "Soon after a stranger arrives in a little village, a mysterious sickness starts spreading. A policeman, drawn into the incident, is forced to solve the mystery in order to save his daughter." },
+            { id: 151, title: "I Saw the Devil", year: 2010, category: "korean-cinema", pg: "R", rating: 7.8, poster: "https://i.pinimg.com/474x/c0/e3/b1/c0e3b1b360011addd18c789b14408d01.jpg",  description: "A secret agent exacts revenge on a serial killer through a series of captures and releases." },
+            { id: 152, title: "The Host", year: 2006, category: "korean-cinema", pg: "R", rating: 7.0, poster: "https://image.tmdb.org/t/p/original/qJc9na2UN7TvKqDWkxBkocPUUjT.jpg", description: "A monster emerges from Seoul's Han River and begins attacking people. One victim's loving family does what it can to rescue her from its clutches." },
+            { id: 153, title: "Burning", year: 2018, category: "korean-cinema", pg: "NR", rating: 7.5, poster: "https://lh5.googleusercontent.com/proxy/QtMZ1-NiSeJrhKB_PiqJiAyEQdHYhVv2uWWvFdc769Jdt70ZKpa9wUFZdAnjq4pbLvad10N7n74FQBMSxBaZyVrT7nWf7AHjWDHiTcbVvznGPiVXCR52AKkb", description: "An aspiring writer, a charming man, and a spirited woman--three people with different lives--cross paths, and the young woman shows the writer a peculiar, unusual hobby." },
+            { id: 154, title: "Okja", year: 2017, category: "korean-cinema", pg: "TV-MA", rating: 7.3, poster: "https://m.media-amazon.com/images/M/MV5BMjQxMTcxNDgxN15BMl5BanBnXkFtZTgwOTczNTIzMjI@._V1_FMjpg_UX1000_.jpg",  description: "A young girl risks everything to prevent a powerful, multinational company from kidnapping her best friend - a massive 'superpig' named Okja." },
+            { id: 155, title: "Minari", year: 2020, category: "korean-cinema", pg: "PG-13", rating: 7.9, poster: "https://m.media-amazon.com/images/M/MV5BNWVmNDE3YzMtZWQ3Ny00YjhkLWEzN2QtZjNhYWNlMGI2N2NkXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", description: "A Korean-American family moves to an Arkansas farm in search of their own American Dream. Amidst the challenges of this new life in the strange and rugged Ozarks, they find the undeniable resilience of family and what really makes a home." },
+
+            // ... [Rest of movie data including MCU, Star Wars, DCU, Franchises]
+            { id: 24, title: "The Matrix", year: 1999, category: "matrix-franchise", pg: "R", rating: 9.6, poster: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",  description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers." },
+            
+            { id: 190, title: "Mission: Impossible", year: 1996, category: "mi-franchise", pg: "PG-13", rating: 7.2, poster: "https://www.tallengestore.com/cdn/shop/products/Mission_Impossible_-_Tom_Cruise_Poster_24e87cd6-a273-4a9c-9d44-209ca67e2825.jpg?v=1569314550",  description: "An American agent, under false suspicion of disloyalty, must discover and expose the real spy without the help of his organization." },
+            { id: 191, title: "Mission: Impossible 2", year: 2000, category: "mi-franchise", pg: "PG-13", rating: 6.1, poster: "https://resizing.flixster.com/YzYavXz0MQquDLJ5MaLhk23vrnw=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p25485_p_v8_aa.jpg",  description: "An agent is sent to Sydney to find and destroy a genetically modified disease called 'Chimera'." },
+            { id: 192, title: "Mission: Impossible III", year: 2006, category: "mi-franchise", pg: "PG-13", rating: 6.7, poster: "https://fiu-original.b-cdn.net/fontsinuse.com/use-images/80/80053/80053.jpeg",  description: "Agent Ethan Hunt comes into conflict with a dangerous and sadistic arms dealer who threatens his life and his fiancée in response." },
+            { id: 36, title: "Mission: Impossible – Ghost Protocol", year: 2011, category: "mi-franchise", pg: "PG-13", rating: 7.0, poster: "https://m.media-amazon.com/images/M/MV5BMTY4MTUxMjQ5OV5BMl5BanBnXkFtZTcwNTUyMzg5Ng@@._V1_.jpg", description: "The IMF is shut down when it's implicated in the bombing of the Kremlin, causing Ethan Hunt and his new team to go rogue to clear their organization's name." },
+            { id: 193, title: "Mission: Impossible – Rogue Nation", year: 2015, category: "mi-franchise", pg: "PG-13", rating: 7.1, poster: "https://m.media-amazon.com/images/M/MV5BZjUwZjg2ZjAtY2RhZi00YmZjLTlhNGQtOWQwNDk1MjhhM2NhXkEyXkFqcGc@._V1_.jpg",  description: "Ethan and his team take on their most impossible mission yet, eradicating the Syndicate - an International rogue organization as highly skilled as they are." },
+            { id: 27, title: "Mission: Impossible – Fallout", year: 2018, category: "mi-franchise", pg: "PG-13", rating: 7.7, poster: "https://i.ebayimg.com/00/s/MTM5M1g5MDA=/z/5iwAAOSwWWxkxbGA/$_57.JPG?set_id=880000500F",  description: "Ethan Hunt and his IMF team, along with some familiar allies, race against time after a mission gone wrong." },
+            { id: 37, title: "Mission: Impossible – Dead Reckoning Part One", year: 2023, category: "mi-franchise", pg: "PG-13", rating: 7.8, poster: "https://image.tmdb.org/t/p/w500/NNxYkU70HPurnNCSiCjYAmacwm.jpg",  description: "Ethan Hunt and his IMF team must track down a dangerous new weapon that threatens all of humanity if it falls into the wrong hands." },
+            { id: 194, title: "Mission: Impossible – The Final Reckoning", year: 2025, category: "mi-franchise", pg: "PG-13", rating: 0, poster: "https://m.media-amazon.com/images/M/MV5BZGQ5NGEyYTItMjNiMi00Y2EwLTkzOWItMjc5YjJiMjMyNTI0XkEyXkFqcGc@._V1_.jpg", description: "The eighth and reportedly final installment in the Mission: Impossible film series, serving as a direct sequel to Dead Reckoning Part One." },
+
+            { id: 38, title: "John Wick", year: 2014, category: "jw-franchise", pg: "R", rating: 7.4, poster: "https://www.tallengestore.com/cdn/shop/products/JohnWick-KeanuReeves-HollywoodEnglishActionMoviePoster-2_d2e65a82-e8e1-46f9-b5f0-7cbd47c1747c.jpg?v=1649071605",  description: "An ex-hitman comes out of retirement to track down the gangsters that took everything from him." },
+            { id: 39, title: "John Wick: Chapter 2", year: 2017, category: "jw-franchise", pg: "R", rating: 7.3, poster: "https://m.media-amazon.com/images/M/MV5BMjE2NDkxNTY2M15BMl5BanBnXkFtZTgwMDc2NzE0MTI@._V1_.jpg",  description: "John Wick is forced back out of retirement by a former associate plotting to seize control of a shadowy international assassins' guild." },
+            { id: 40, title: "John Wick: Chapter 3 – Parabellum", year: 2019, category: "jw-franchise", pg: "R", rating: 7.4, poster: "https://image.tmdb.org/t/p/w500/ziEuG1essDuWuC5lpWUaw1uXY2O.jpg", description: "John Wick is on the run after killing a member of the international assassins' guild, and with a $14 million price tag on his head, he is the target of hit men and women everywhere." },
+            { id: 41, title: "John Wick: Chapter 4", year: 2023, category: "jw-franchise", pg: "R", rating: 7.9, poster: "https://m.media-amazon.com/images/I/81fk-N7tvbL._UF1000,1000_QL80_.jpg",  description: "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe." },
+            { id: 195, title: "Ballerina", year: 2025, category: "jw-franchise", pg: "R", rating: 0, poster: "https://ballerinamovie2025.com/_astro/poster_pw5mnf_P1Ur8.webp",  description: "A young female assassin seeks revenge against the people who killed her family. A spin-off set in the John Wick universe." },
+
+            { id: 196, title: "The Fast and the Furious", year: 2001, category: "ff-franchise", pg: "PG-13", rating: 6.8, poster: "https://m.media-amazon.com/images/M/MV5BZGRiMDE1NTMtMThmZS00YjE4LWI1ODQtNjRkZGZlOTg2MGE1XkEyXkFqcGc@._V1_.jpg",  description: "Los Angeles police officer Brian O'Conner must decide where his loyalty really lies when he becomes enamored with the street racing world he has been sent undercover to destroy." },
+            { id: 197, title: "2 Fast 2 Furious", year: 2003, category: "ff-franchise", pg: "PG-13", rating: 6.2, poster: "https://www.tallengestore.com/cdn/shop/products/2_Fast_2_Furious_-_Paul_Walker_-_Tallenge_Hollywood_Action_Movie_Poster.jpg?v=1582526808",  description: "Former cop Brian O'Conner is called upon to bust a dangerous criminal and he recruits the help of a former childhood friend and street racer who has a chance to redeem himself." },
+            { id: 198, title: "The Fast and the Furious: Tokyo Drift", year: 2006, category: "ff-franchise", pg: "PG-13", rating: 6.2, poster: "https://www.tallengestore.com/cdn/shop/products/Fast_Furious_3_-_Tokyo_Drift_-_Tallenge_Hollywood_Action_Movie_Poster.jpg?v=1582531087",  description: "A teenager becomes a major competitor in the world of drift racing after moving in with his father in Tokyo to avoid a jail sentence in America." },
+            { id: 199, title: "Fast & Furious", year: 2009, category: "ff-franchise", pg: "PG-13", rating: 6.6, poster: "https://www.tallengestore.com/cdn/shop/products/Fast_Furious_4_-_Paul_Walker_-_Vin_Diesel_-_Tallenge_Hollywood_Action_Movie_Poster_2c61b4c6-1e27-47be-b551-5b681de9af59.jpg?v=1582543073",  description: "Brian O'Conner, back working for the FBI in Los Angeles, teams up with Dominic Toretto to bring down a heroin importer by infiltrating his operation." },
+            { id: 42, title: "Fast Five", year: 2011, category: "ff-franchise", pg: "PG-13", rating: 7.2, poster: "https://image.tmdb.org/t/p/original/gEfQjjQwY7fh5bI4GlG0RrBu7Pz.jpg", description: "Dominic Toretto and his crew of street racers plan a massive heist to buy their freedom while in the sights of a powerful Brazilian drug lord and a federal agent." },
+            { id: 200, title: "Fast & Furious 6", year: 2013, category: "ff-franchise", pg: "PG-13", rating: 6.8, poster: "https://www.tallengestore.com/cdn/shop/products/Fast_Furious_6_-_Paul_Walker_-_Vin_Diesel_-_Dwayne_Johnson_-_Tallenge_Hollywood_Action_Movie_Poster_8a627128-4807-4ca0-bac4-15c9679a2990.jpg?v=1582543190",  description: "Hobbs has Dominic and Brian reassemble their crew to take down a team of mercenaries: Dominic unexpectedly gets sidetracked with facing his presumed deceased girlfriend, Letty." },
+            { id: 43, title: "Furious 7", year: 2015, category: "ff-franchise", pg: "PG-13", rating: 7.3, poster: "https://www.tallengestore.com/cdn/shop/products/Fast_Furious_7_-_Paul_Walker_-_Vin_Diesel_-_Dwayne_Johnson_-_Hollywood_Action_Movie_Poster.jpg?v=1582535195", description: "Deckard Shaw seeks revenge against Dominic Toretto and his family for his comatose brother." },
+            { id: 201, title: "The Fate of the Furious", year: 2017, category: "ff-franchise", pg: "PG-13", rating: 6.9, poster: "https://www.tallengestore.com/cdn/shop/products/Fast_Furious_8_-_Fate_Of_The_Furious_-_Tallenge_Hollywood_Action_Movie_Poster_409f4393-bd18-49fb-8da7-80448d659312.jpg?v=1582543290",  description: "When a mysterious woman seduces Dominic Toretto into the world of terrorism and a betrayal of those closest to him, the crew face trials that will test them as never before." },
+            { id: 202, title: "Fast & Furious Presents: Hobbs & Shaw", year: 2019, category: "ff-franchise", pg: "PG-13", rating: 6.9, poster: "https://www.uphe.com/sites/default/files/styles/scale__344w_/public/2020/01/Fast%26FuriousPresentsHobbs%26Shaw_PosterArt.jpg?itok=hlhoCQSH",  description: "Lawman Luke Hobbs and outcast Deckard Shaw form an unlikely alliance when a cyber-genetically enhanced villain threatens the future of humanity." },
+            { id: 44, title: "F9", year: 2021, category: "ff-franchise", pg: "PG-13", rating: 6.8, poster: "https://artofthemovies.co.uk/cdn/shop/products/FastandFurious9-AdvanceOneSheet-900739.jpg?v=1611687953",  description: "Dom and the crew must take on an international terrorist who turns out to be Dom and Mia's estranged brother." },
+            { id: 45, title: "Fast X", year: 2023, category: "ff-franchise", pg: "PG-13", rating: 6.9, poster: "https://image.tmdb.org/t/p/w500/fiVW06jE7z9YnO4trhaMEdclSiC.jpg", description: "Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes." },
+
+            { id: 46, title: "The Matrix Reloaded", year: 2003, category: "matrix-franchise", pg: "R", rating: 6.9, poster: "https://image.tmdb.org/t/p/original/aA5qHS0FbSXO8PxcxUIHbDrJyuh.jpg",  description: "Freedom fighters Neo, Trinity and Morpheus lead the revolt against the Machine Army, unleashing their arsenal of extraordinary skills and weaponry against the systematic forces of repression and exploitation." },
+            { id: 47, title: "The Matrix Revolutions", year: 2003, category: "matrix-franchise", pg: "R", rating: 6.7, poster: "https://cdn11.bigcommerce.com/s-yzgoj/images/stencil/1280x1280/products/2881034/5961164/MOVAJ2576__90196.1679604289.jpg?c=2",  description: "The human city of Zion defends itself against the massive invasion of the machines as Neo fights to end the war at another front while also opposing the rogue Agent Smith." },
+            { id: 48, title: "The Matrix Resurrections", year: 2021, category: "matrix-franchise", pg: "R", rating: 6.2, poster: "https://m.media-amazon.com/images/M/MV5BMDMyNDIzYzMtZTMyMy00NjUyLWI3Y2MtYzYzOGE1NzQ1MTBiXkEyXkFqcGc@._V1_.jpg", description: "To find out if his reality is a physical or mental construct, Mr. Anderson, aka Neo, will have to choose to follow the white rabbit once more." },
+            
+            { id: 49, title: "The Conjuring", year: 2013, category: "conjuring-franchise", pg: "R", rating: 7.5, poster: "https://i.pinimg.com/736x/d9/fd/fc/d9fdfc4a42b44e149967a0294af00f70.jpg",  description: "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse." },
+            { id: 50, title: "Annabelle", year: 2014, category: "conjuring-franchise", pg: "R", rating: 5.6, poster: "https://m.media-amazon.com/images/M/MV5BNjkyMDU5ZWQtZDhkOC00ZWFjLWIyM2MtZWFhMDUzNjdlNzU2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "A couple begins to experience terrifying supernatural occurrences involving a vintage doll shortly after their home is invaded by satanic cultists." },
+            { id: 51, title: "The Conjuring 2", year: 2016, category: "conjuring-franchise", pg: "R", rating: 7.3, poster: "https://media-cache.cinematerial.com/p/500x/vpwbv62f/the-conjuring-2-french-movie-poster.jpg?v=1465507600",  description: "Paranormal investigators Ed and Lorraine Warren travel to London to help a single mother and her four children who are being terrorized by a malicious spirit." },
+            { id: 203, title: "Annabelle: Creation", year: 2017, category: "conjuring-franchise", pg: "R", rating: 6.5, poster: "https://m.media-amazon.com/images/M/MV5BMjA1MzIwMjMxNF5BMl5BanBnXkFtZTgwMDQ3NTc2MjI@._V1_.jpg", description: "12 years after the tragic death of their little girl, a doll-maker and his wife welcome a nun and several girls from a shuttered orphanage into their home, where they become the target of the doll-maker's possessed creation, Annabelle." },
+            { id: 52, title: "The Nun", year: 2018, category: "conjuring-franchise", pg: "R", rating: 5.8, poster: "https://image.tmdb.org/t/p/w500/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg", description: "A priest with a haunted past and a novice on the threshold of her final vows are sent by the Vatican to investigate the death of a young nun in Romania and confront a malevolent force in the form of a demonic nun." },
+            { id: 204, title: "Annabelle Comes Home", year: 2019, category: "conjuring-franchise", pg: "R", rating: 6.2, poster: "https://irs.www.warnerbros.com/keyart-jpeg/movies/media/browser/annabelle_comes_home_keyart.jpg", description: "While babysitting the daughter of Ed and Lorraine Warren, a teenager and her friend unknowingly awaken an evil spirit trapped in a doll." },
+            { id: 205, title: "The Curse of La Llorona", year: 2019, category: "conjuring-franchise", pg: "R", rating: 5.9, poster: "https://m.media-amazon.com/images/M/MV5BMWFkNjBkYjQtYjQyNC00NDIxLTg3ZDQtNDU3YzRiYWI5NjQyXkEyXkFqcGc@._V1_.jpg",  description: "Ignoring the eerie warning of a troubled mother suspected of child endangerment, a social worker and her own small kids are soon drawn into a frightening supernatural realm." },
+            { id: 206, title: "The Conjuring: The Devil Made Me Do It", year: 2021, category: "conjuring-franchise", pg: "R", rating: 7.5, poster: "https://image.tmdb.org/t/p/w500/xbSuFiJbbBWCkyCCKIMfuDCA4yV.jpg",  description: "Paranormal investigators Ed and Lorraine Warren take on one of the most sensational cases of their careers after a cop stumbles upon a dazed and bloodied young man walking down the road." },
+            { id: 207, title: "The Nun II", year: 2023, category: "conjuring-franchise", pg: "R", rating: 6.7, poster: "https://image.tmdb.org/t/p/w500/5gzzkR7y3hnY8AD1wXjCnVlHba5.jpg",  description: "In 1956 France, a priest is murdered, and it seems an evil is spreading. Sister Irene once again comes face-to-face with Valak, the demon nun." },
+            { id: 208, title: "The Conjuring: Last Rites", year: 2025, category: "conjuring-franchise", pg: "R", rating: 0, poster: "https://lh5.googleusercontent.com/proxy/stJFO6AJI-pvtE6SwXwIShFlpX8BLlJYeILofYcPnD60yMHotuSl5Oi5pfKOOvouT86VRNSpv13bU0VpGiRQ75zWA3gCMmo3F4fL3wo61ISyYFLUqr8", description: "The upcoming fourth installment in 'The Conjuring' series, which will reportedly be the final chapter for Ed and Lorraine Warren." },
+            
+            { id: 53, title: "Iron Man", year: 2008, category: "mcu-phase-one", universe: "MCU", pg: "PG-13", rating: 7.9, poster: "https://m.media-amazon.com/images/I/61yvz+ELKyS._UF1000,1000_QL80_.jpg",  description: "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil." },
+            { id: 54, title: "The Incredible Hulk", year: 2008, category: "mcu-phase-one", universe: "MCU", pg: "PG-13", rating: 6.7, poster: "https://m.media-amazon.com/images/M/MV5BMTUyNzk3MjA1OF5BMl5BanBnXkFtZTcwMTE1Njg2MQ@@._V1_.jpg",  description: "Bruce Banner, a scientist on the run from the U.S. Government, must find a cure for the monster he turns into whenever he loses his temper." },
+            { id: 55, title: "Iron Man 2", year: 2010, category: "mcu-phase-one", universe: "MCU", pg: "PG-13", rating: 7.0, poster: "https://m.media-amazon.com/images/I/8171kEgHRRL._UF1000,1000_QL80_.jpg", description: "With the world now aware of his dual life as Iron Man, Tony Stark must confront new enemies and his own declining health." },
+            { id: 56, title: "Thor", year: 2011, category: "mcu-phase-one", universe: "MCU", pg: "PG-13", rating: 7.0, poster: "https://m.media-amazon.com/images/M/MV5BNjRhNGZjZjEtYTQzYS00OWUxLThjNGEtMTIwMTE2ZDFlZTZkXkEyXkFqcGc@._V1_.jpg",  description: "The powerful but arrogant god Thor is cast out of Asgard to live amongst humans in Midgard (Earth), where he soon becomes one of their finest defenders." },
+            { id: 57, title: "Captain America: The First Avenger", year: 2011, category: "mcu-phase-one", universe: "MCU", pg: "PG-13", rating: 6.9, poster: "https://m.media-amazon.com/images/I/51wGo96+fpL._UF894,1000_QL80_.jpg",  description: "Steve Rogers, a rejected military soldier, transforms into Captain America after taking a dose of a 'Super-Soldier serum'." },
+            { id: 58, title: "The Avengers", year: 2012, category: "mcu-phase-one", universe: "MCU", pg: "PG-13", rating: 8.0, poster: "https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",  description: "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity." },
+            { id: 59, title: "Iron Man 3", year: 2013, category: "mcu-phase-two", universe: "MCU", pg: "PG-13", rating: 6.8, poster: "https://m.media-amazon.com/images/I/8159UW0-AEL.jpg",  description: "When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution." },
+            { id: 60, title: "Thor: The Dark World", year: 2013, category: "mcu-phase-two", universe: "MCU", pg: "PG-13", rating: 6.6, poster: "https://i.pinimg.com/736x/60/24/6e/60246eb78dd9ae0227be4d467d4e5db6.jpg", description: "Thor teams up with Loki to save the Nine Realms from the Dark Elves, who want to plunge the universe into darkness." },
+            { id: 61, title: "Captain America: The Winter Soldier", year: 2014, category: "mcu-phase-two", universe: "MCU", pg: "PG-13", rating: 7.7, poster: "https://posterspy.com/wp-content/uploads/2021/01/Winter_Soldier_Poster.jpg",  description: "As Steve Rogers struggles to embrace his role in the modern world, he teams up with a fellow Avenger and S.H.I.E.L.D. agent, Black Widow, to battle a new threat from history: the Winter Soldier." },
+            { id: 62, title: "Guardians of the Galaxy", year: 2014, category: "mcu-phase-two", universe: "MCU", pg: "PG-13", rating: 7.9, poster: "https://images-cdn.ubuy.co.in/634d3801caf5d162792f7516-poster-stop-online-guardians-of-the.jpg",  description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe." },
+            { id: 63, title: "Avengers: Age of Ultron", year: 2015, category: "mcu-phase-two", universe: "MCU", pg: "PG-13", rating: 7.3, poster: "https://image.tmdb.org/t/p/w500/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",  description: "When Tony Stark and Bruce Banner try to jump-start a dormant peacekeeping program called Ultron, things go horribly wrong and it's up to Earth's mightiest heroes to stop the villainous Ultron from enacting his terrible plan." },
+            { id: 64, title: "Ant-Man", year: 2015, category: "mcu-phase-two", universe: "MCU", pg: "PG-13", rating: 7.0, poster: "https://m.media-amazon.com/images/I/81MDP9RWhoL._UF894,1000_QL80_.jpg",  description: "Armed with a super-suit with the astonishing ability to shrink in scale but increase in strength, cat burglar Scott Lang must embrace his inner hero and help his mentor, Dr. Hank Pym, plan and pull off a heist that will save the world." },
+            { id: 65, title: "Captain America: Civil War", year: 2016, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.8, poster: "https://image.tmdb.org/t/p/w500/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg",  description: "Political involvement in the Avengers' affairs causes a rift between Captain America and Iron Man." },
+            { id: 66, title: "Doctor Strange", year: 2016, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.5, poster: "https://image.tmdb.org/t/p/w500/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg",  description: "While on a journey of physical and spiritual healing, a brilliant neurosurgeon is drawn into the world of the mystic arts." },
+            { id: 67, title: "Guardians of the Galaxy Vol. 2", year: 2017, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.6, poster: "https://i.etsystatic.com/12729518/r/il/a1129c/1974320142/il_570xN.1974320142_s7jp.jpg",  description: "The Guardians struggle to keep their newfound family together as they unravel the mysteries of Peter Quill's true parentage." },
+            { id: 68, title: "Spider-Man: Homecoming", year: 2017, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.4, poster: "https://stat5.bollywoodhungama.in/wp-content/uploads/2017/03/Spider-Man-Homecoming-1.jpg",  description: "Peter Parker balances his life as an ordinary high school student in Queens with his superhero alter-ego Spider-Man, and finds himself on the trail of a new menace prowling the skies of New York City." },
+            { id: 69, title: "Thor: Ragnarok", year: 2017, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.6, poster: "https://image.tmdb.org/t/p/w500/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg",  description: "Thor is imprisoned on the other side of the universe and finds himself in a deadly gladiatorial contest that pits him against the Hulk, his former ally and fellow Avenger." },
+            { id: 70, title: "Black Panther", year: 2018, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.4, poster: "https://lumiere-a.akamaihd.net/v1/images/p_blackpanther_19754_4ac13f07.jpeg",  description: "T'Challa, heir to the hidden but advanced kingdom of Wakanda, must step forward to lead his people into a new future and must confront a challenger from his country's past." },
+            { id: 71, title: "Avengers: Infinity War", year: 2018, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 8.3, poster: "https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg", description: "The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos before his blitz of devastation and ruin puts an end to the universe." },
+            { id: 72, title: "Ant-Man and the Wasp", year: 2018, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.0, poster: "https://m.media-amazon.com/images/M/MV5BODVkY2ZmZTAtYzFhMi00YzZlLWE2YWMtMDBiYjY2OTU4ZWM0XkEyXkFqcGc@._V1_.jpg",  description: "As Scott Lang balances being both a superhero and a father, Hope van Dyne and Dr. Hank Pym present an urgent new mission that finds the Ant-Man fighting alongside The Wasp to uncover secrets from their past." },
+            { id: 73, title: "Captain Marvel", year: 2019, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 6.9, poster: "https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg", description: "Carol Danvers becomes one of the universe's most powerful heroes when Earth is caught in the middle of a galactic war between two alien races." },
+            { id: 74, title: "Avengers: Endgame", year: 2019, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 8.3, poster: "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",  description: "Adrift in space with no food or water, Tony Stark sends a message to Pepper Potts as his oxygen supply starts to dwindle. Meanwhile, the remaining Avengers -- Thor, Black Widow, Captain America and Bruce Banner -- must figure out a way to bring back their vanquished allies for an epic showdown with Thanos -- the evil demigod who decimated the planet and the universe." },
+            { id: 75, title: "Spider-Man: Far From Home", year: 2019, category: "mcu-phase-three", universe: "MCU", pg: "PG-13", rating: 7.5, poster: "https://image.tmdb.org/t/p/w500/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg",  description: "Following the events of Avengers: Endgame, Spider-Man must step up to take on new threats in a world that has changed forever." },
+            { id: 76, title: "Black Widow", year: 2021, category: "mcu-phase-four", universe: "MCU", pg: "PG-13", rating: 6.8, poster: "https://rukminim2.flixcart.com/image/704/844/kv5kfww0/wall-decoration/a/9/x/black-widow-movie-poster-marvel-cinematic-universe-portrait-original-imag846zhwhhhzmy.jpeg?q=90&crop=false",  description: "Natasha Romanoff confronts the darker parts of her ledger when a dangerous conspiracy with ties to her past arises." },
+            { id: 77, title: "Shang-Chi and the Legend of the Ten Rings", year: 2021, category: "mcu-phase-four", universe: "MCU", pg: "PG-13", rating: 7.8, poster: "https://m.media-amazon.com/images/I/813f5y-8UjL.jpg",  description: "Shang-Chi, the master of weaponry-based Kung Fu, is forced to confront his past after being drawn into the Ten Rings organization." },
+            { id: 78, title: "Eternals", year: 2021, category: "mcu-phase-four", universe: "MCU", pg: "PG-13", rating: 6.8, poster: "https://image.tmdb.org/t/p/w500/bcCBq9N1EMo3daNIjWJ8kYvrQm6.jpg",  description: "The saga of the Eternals, a race of immortal beings who lived on Earth and shaped its history and civilizations." },
+            { id: 79, title: "Spider-Man: No Way Home", year: 2021, category: "mcu-phase-four", universe: "MCU", pg: "PG-13", rating: 8.1, poster: "https://images-cdn.ubuy.co.in/634e3c67f6511e3fcc7c57a3-2021-movie-tom-holland-spider-man-no.jpg",  description: "With Spider-Man's identity now revealed, Peter asks Doctor Strange for help. When a spell goes wrong, dangerous foes from other worlds start to appear, forcing Peter to discover what it truly means to be Spider-Man." },
+            { id: 80, title: "Doctor Strange in the Multiverse of Madness", year: 2022, category: "mcu-phase-four", universe: "MCU", pg: "PG-13", rating: 7.5, poster: "https://image.tmdb.org/t/p/w500/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg",  description: "Doctor Strange, with the help of mystical allies both old and new, traverses the mind-bending and dangerous alternate realities of the Multiverse to confront a mysterious new adversary." },
+            { id: 81, title: "Thor: Love and Thunder", year: 2022, category: "mcu-phase-four", universe: "MCU", pg: "PG-13", rating: 6.7, poster: "https://image.tmdb.org/t/p/w500/pIkRyD18kl4FhoCNQuWxWu5cBLM.jpg",  description: "Thor enlists the help of Valkyrie, Korg and ex-girlfriend Jane Foster to fight Gorr the God Butcher, who intends to make the gods extinct." },
+            { id: 82, title: "Black Panther: Wakanda Forever", year: 2022, category: "mcu-phase-four", universe: "MCU", pg: "PG-13", rating: 7.3, poster: "https://lumiere-a.akamaihd.net/v1/images/pp_disney_blackpanther_wakandaforever_1289_d3419b8f.jpeg", description: "The people of Wakanda fight to protect their home from intervening world powers as they mourn the death of King T'Challa." },
+            { id: 83, title: "Ant-Man and the Wasp: Quantumania", year: 2023, category: "mcu-phase-five", universe: "MCU", pg: "PG-13", rating: 6.4, poster: "https://m.media-amazon.com/images/M/MV5BMmY3NmE0MzUtNGVmZi00NTVjLWE4NzUtMTEwYzM2YzQ1YWZmXkEyXkFqcGc@._V1_.jpg",  description: "Scott Lang and Hope Van Dyne, along with Hank Pym and Janet Van Dyne, explore the Quantum Realm, where they interact with strange new creatures and embark on an adventure that goes beyond the limits of what they thought was possible." },
+            { id: 84, title: "Guardians of the Galaxy Vol. 3", year: 2023, category: "mcu-phase-five", universe: "MCU", pg: "PG-13", rating: 8.1, poster: "https://image.tmdb.org/t/p/w500/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg", description: "Still reeling from the loss of Gamora, Peter Quill rallies his team to defend the universe and one of their own - a mission that could mean the end of the Guardians if not successful." },
+            { id: 85, title: "The Marvels", year: 2023, category: "mcu-phase-five", universe: "MCU", pg: "PG-13", rating: 6.3, poster: "https://lumiere-a.akamaihd.net/v1/images/p_disneyplusoriginals_themarvels_poster_rebrand_8c17eea5.jpeg",  description: "Carol Danvers, aka Captain Marvel, has reclaimed her identity from the tyrannical Kree and taken revenge on the Supreme Intelligence. But unintended consequences see Carol shouldering the burden of a destabilized universe." },
+            { id: 86, title: "Deadpool & Wolverine", year: 2024, category: "mcu-phase-five", universe: "MCU", pg: "R", rating: 8.0, poster: "https://m.media-amazon.com/images/M/MV5BYWQwZjVjNGEtMGY0Zi00MDM2LTllMDUtMTA5MzUwMmQyMDI0XkEyXkFqcGc@._V1_.jpg",  description: "A listless Wade Wilson toils away in civilian life. His days as the morally flexible mercenary, Deadpool, behind him. When his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine." },
+            { id: 89, title: "The Fantastic Four: First Steps", year: 2025, category: "mcu-phase-six", universe: "MCU", pg: "N/A", rating: 0, poster: "https://image.tmdb.org/t/p/original/abqOz6EL3yXyOOafCPZxjL1M5bQ.jpg",  description: "The first family of Marvel Comics, The Fantastic Four, are set to join the Marvel Cinematic Universe." },
+            
+            { id: 90, title: "A New Hope", year: 1977, category: "sw-original-trilogy", universe: "Star Wars", pg: "PG", rating: 8.2, poster: "https://i.etsystatic.com/41315688/r/il/b6fead/4761852764/il_570xN.4761852764_ofdt.jpg",  description: "Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the lovable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire." },
+            { id: 91, title: "The Empire Strikes Back", year: 1980, category: "sw-original-trilogy", universe: "Star Wars", pg: "PG", rating: 8.4, poster: "https://m.media-amazon.com/images/I/81wJOuDWOYL._UF1000,1000_QL80_.jpg",  description: "The epic saga continues as Luke Skywalker, in hopes of defeating the evil Galactic Empire, learns the ways of the Jedi from aging master Yoda. But Darth Vader is more determined than ever to capture Luke." },
+            { id: 92, title: "Return of the Jedi", year: 1983, category: "sw-original-trilogy", universe: "Star Wars", pg: "PG", rating: 8.0, poster: "https://i.pinimg.com/474x/b5/80/4e/b5804e8f1b577c8204dc3d4add2bb60a.jpg",  description: "Luke Skywalker leads a mission to rescue his friend Han Solo from the clutches of Jabba the Hutt, while the Emperor and Darth Vader plot to turn Luke to the dark side." },
+            { id: 93, title: "The Phantom Menace", year: 1999, category: "sw-prequel-trilogy", universe: "Star Wars", pg: "PG", rating: 6.5, poster: "https://media.themoviedb.org/t/p/w220_and_h330_face/x5jfgaL2N3TpwUNuMwkfQi6Jev8.jpg",  description: "Anakin Skywalker, a young slave strong with the Force, is discovered on Tatooine. Meanwhile, the evil Trade Federation has surrounded the peaceful planet of Naboo, forcing Jedi Master Qui-Gon Jinn and his apprentice, Obi-Wan Kenobi, to flee the planet." },
+            { id: 94, title: "Attack of the Clones", year: 2002, category: "sw-prequel-trilogy", universe: "Star Wars", pg: "PG", rating: 6.6, poster: "https://m.media-amazon.com/images/I/615R0q0JQmL.jpg",  description: "Ten years after the invasion of Naboo, the galaxy is on the brink of civil war. Under the leadership of a renegade Jedi named Count Dooku, thousands of solar systems threaten to break away from the Galactic Republic." },
+            { id: 95, title: "Revenge of the Sith", year: 2005, category: "sw-prequel-trilogy", universe: "Star Wars", pg: "PG-13", rating: 7.4, poster: "https://preview.redd.it/official-20th-anniversary-poster-for-star-wars-episode-iii-v0-keaxfxiu5ble1.jpeg?auto=webp&s=a0e0f3779aa7dac30f9b092fbc74bcfeb0a2d6ef",  description: "Years after the onset of the Clone Wars, the noble Jedi Knights lead a massive clone army into a galaxy-wide battle against the Separatists. When the sinister Sith Lord Darth Sidious enacts his long-planned strategy to seize power, the fate of Anakin Skywalker, the Jedi order and the entire galaxy hangs in the balance." },
+            { id: 96, title: "The Force Awakens", year: 2015, category: "sw-sequel-trilogy", universe: "Star Wars", pg: "PG-13", rating: 7.3, poster: "https://m.media-amazon.com/images/I/71TtGTvqGAL._UF1000,1000_QL80_.jpg", description: "Thirty years after defeating the Galactic Empire, Han Solo and his allies face a new threat from the evil Kylo Ren and his army of Stormtroopers." },
+            { id: 97, title: "The Last Jedi", year: 2017, category: "sw-sequel-trilogy", universe: "Star Wars", pg: "PG-13", rating: 6.9, poster: "https://lumiere-a.akamaihd.net/v1/images/sb_payoff_1-sht_v6_lg_tm_lg_e528c9e9.jpeg?region=0%2C0%2C810%2C1200",  description: "Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares for battle with the First Order." },
+            { id: 98, title: "The Rise of Skywalker", year: 2019, category: "sw-sequel-trilogy", universe: "Star Wars", pg: "PG-13", rating: 6.5, poster: "https://image.tmdb.org/t/p/w500/db32LaOibwEliAmSL2jjDF6oDdj.jpg", description: "The surviving Resistance faces the First Order once again as the journey of Rey, Finn and Poe Dameron continues. With the power and knowledge of generations behind them, the final battle commences." },
+            { id: 99, title: "Rogue One: A Star Wars Story", year: 2016, category: "sw-anthology", universe: "Star Wars", pg: "PG-13", rating: 7.5, poster: "https://m.media-amazon.com/images/M/MV5BMjEwMzMxODIzOV5BMl5BanBnXkFtZTgwNzg3OTAzMDI@._V1_FMjpg_UX1000_.jpg", description: "A rogue band of resistance fighters unite for a mission to steal the Death Star plans and bring a new hope to the galaxy." },
+            { id: 100, title: "Solo: A Star Wars Story", year: 2018, category: "sw-anthology", universe: "Star Wars", pg: "PG-13", rating: 6.6, poster: "https://image.tmdb.org/t/p/w500/3IGbjc5ZC5yxim5W0sFING2kdcz.jpg", description: "Through a series of daring escapades deep within a dark and dangerous criminal underworld, Han Solo meets his mighty future copilot Chewbacca and encounters the notorious gambler Lando Calrissian." },
+            
+            { id: 101, title: "Man of Steel", year: 2013, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.6, poster: "https://m.media-amazon.com/images/M/MV5BMTk5ODk1NDkxMF5BMl5BanBnXkFtZTcwNTA5OTY0OQ@@._V1_.jpg",  description: "A young boy learns that he has extraordinary powers and is not of this Earth. As a young man, he journeys to discover where he came from and what he was sent here to do." },
+            { id: 102, title: "Batman v Superman: Dawn of Justice", year: 2016, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 5.9, poster: "https://image.tmdb.org/t/p/w500/5UsK3grJvtQrtzEgqNlDljJW96w.jpg",  description: "Fearing that the actions of Superman are left unchecked, Batman takes on the Man of Steel, while the world wrestles with what kind of a hero it really needs." },
+            { id: 103, title: "Suicide Squad", year: 2016, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 5.9, poster: "https://images-cdn.ubuy.co.in/633d25b853c5092f5f4bbb0c-movie-poster-suicide-squad-2-sided.jpg", description: "A secret government agency recruits some of the most dangerous incarcerated supervillains to form a defensive task force. Their first mission: save the world from the apocalypse." },
+            { id: 104, title: "Wonder Woman", year: 2017, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 7.3, poster: "https://i.ebayimg.com/images/g/PeIAAOSwLixhZOzF/s-l1200.jpg",  description: "An Amazon princess comes to the world of Man to become the greatest of her race to save the world from a war that could end all wars." },
+            { id: 105, title: "Justice League", year: 2017, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.1, poster: "https://www.hollywoodreporter.com/wp-content/uploads/2017/10/dmbgznxx4aaysjv_-_p_2017.jpg",  description: "Fueled by his restored faith in humanity and inspired by Superman's selfless act, Bruce Wayne enlists the help of his new-found ally, Diana Prince, to face an even greater enemy." },
+            { id: 106, title: "Aquaman", year: 2018, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.9, poster: "https://m.media-amazon.com/images/M/MV5BOTk5ODg0OTU5M15BMl5BanBnXkFtZTgwMDQ3MDY3NjM@._V1_.jpg", description: "Arthur Curry, the human-born heir to the underwater kingdom of Atlantis, goes on a quest to prevent a war between the worlds of ocean and land." },
+            { id: 107, title: "Shazam!", year: 2019, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 7.0, poster: "https://m.media-amazon.com/images/M/MV5BZWM1YjdmOGQtNGYyMC00NjMwLTk1OWUtMGYzM2NjYjliYzYyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "A newly fostered young boy in search of his mother instead finds unexpected super powers and soon gains a powerful enemy." },
+            { id: 108, title: "Birds of Prey", year: 2020, category: "dceu-released", universe: "DCU", pg: "R", rating: 6.8, poster: "https://static.toiimg.com/thumb/imgsize-23456,msid-71173890,width-600,resizemode-4/71173890.jpg",  description: "After splitting with the Joker, Harley Quinn joins superheroes Black Canary, Huntress and Renee Montoya to save a young girl from an evil crime lord." },
+            { id: 109, title: "Wonder Woman 1984", year: 2020, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.6, poster: "https://image.tmdb.org/t/p/w500/8UlWHLMpgZm9bx6QYh0NFoq67TZ.jpg",  description: "Diana Prince lives quietly among mortals in the vibrant, sleek 1980s -- an era of excess driven by the pursuit of having it all. She comes into conflict with two formidable foes: Maxwell Lord and the Cheetah." },
+            { id: 110, title: "Zack Snyder's Justice League", year: 2021, category: "dceu-released", universe: "DCU", pg: "R", rating: 8.3, poster: "https://image.tmdb.org/t/p/w500/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg",  description: "Determined to ensure Superman's ultimate sacrifice was not in vain, Bruce Wayne aligns forces with Diana Prince with plans to recruit a team of metahumans to protect the world from an approaching threat of catastrophic proportions." },
+            { id: 111, title: "The Suicide Squad", year: 2021, category: "dceu-released", universe: "DCU", pg: "R", rating: 7.7, poster: "https://m.media-amazon.com/images/M/MV5BMWU3Y2NlZmEtMjJjNS00ZWMxLWE1MzctYWYyMjMzMDdkNTE4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",  description: "Supervillains Harley Quinn, Bloodsport, Peacemaker and a collection of nutty cons at Belle Reve prison join the super-secret, super-shady Task Force X as they are dropped off at the remote, enemy-infused island of Corto Maltese." },
+            { id: 112, title: "Black Adam", year: 2022, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.9, poster: "https://image.tmdb.org/t/p/w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg",  description: "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods--and imprisoned just as quickly--Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world." },
+            { id: 113, title: "Shazam! Fury of the Gods", year: 2023, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.6, poster: "https://image.tmdb.org/t/p/original/A3ZbZsmsvNGdprRi2lKgGEeVLEH.jpg",  description: "The film continues the story of teenage Billy Batson who, upon reciting the magic word 'SHAZAM!,' is transformed into his adult Super Hero alter ego, Shazam." },
+            { id: 114, title: "The Flash", year: 2023, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.8, poster: "https://m.media-amazon.com/images/M/MV5BMTgwYjY0NTQtMjYyYS00YTg5LTliYWMtNWQ0OTk0OGYxZmUzXkEyXkFqcGc@._V1_.jpg",  description: "Barry Allen uses his super speed to change the past, but his attempt to save his family creates a world without super heroes, forcing him to race for his life in order to save the future." },
+            { id: 115, title: "Blue Beetle", year: 2023, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 7.0, poster: "https://image.tmdb.org/t/p/original/mXLOHHc1Zeuwsl4xYKjKh2280oL.jpg",  description: "Recent college grad Jaime Reyes returns home full of aspirations for his future, only to find that home is not quite as he left it. As he searches to find his purpose in the world, fate intervenes when Jaime unexpectedly finds himself in possession of an ancient relic of alien biotechnology: the Scarab." },
+            { id: 116, title: "Aquaman and the Lost Kingdom", year: 2023, category: "dceu-released", universe: "DCU", pg: "PG-13", rating: 6.5, poster: "https://image.tmdb.org/t/p/w500/8xV47NDrjdZDpkVcCFqkdHa3T0C.jpg",  description: "Black Manta seeks revenge on Aquaman for his father's death. Wielding the Black Trident, he unleashes a powerful force. Aquaman must turn to his brother Orm for help." },
+            { id: 117, title: "Superman", year: 2025, category: "dcu-reboot", universe: "DCU", pg: "N/A", rating: 0, poster: "https://preview.redd.it/new-poster-for-superman-2025-v0-nksyu8mmik0f1.jpeg?width=640&crop=smart&auto=webp&s=a5469e24e17b4b2fdd04b534640c8c4fb7acf565",  description: "Follows Superman as he reconciles his Kryptonian heritage with his human upbringing. He is the embodiment of truth, justice and the American way, and a beacon of hope in a world that has grown weary of it." },
+            { id: 118, title: "Peacemaker", year: 2022, category: "dcu-reboot", universe: "DCU", pg: "TV-MA", rating: 8.3, seasons: 2, poster: "https://image.tmdb.org/t/p/original/yb4F1Oocq8GfQt6iIuAgYEBokhG.jpg",  description: "The origin of the DC superhero so dedicated to world peace that he is prepared to use force of arms to achieve it." }
+        ];
+
+        const sectionConfig = [
+            { id: "upcoming-releases", title: "Upcoming Movies & Web Series" },
+            { id: "anime-world", title: "Anime World" },
+            { id: "hollywood-blockbusters", title: "Hollywood Blockbusters" },
+            { id: "bollywood-hits", title: "Bollywood Hits" },
+            { id: "korean-cinema", title: "Korean Cinema" },
+        ];
+        
+        const franchiseData = [
+            { id: "mi-franchise", title: "Mission: Impossible", icon: "target", color: "bg-gray-600" },
+            { id: "jw-franchise", title: "John Wick", icon: "contact-2", color: "bg-stone-700" },
+            { id: "ff-franchise", title: "Fast & Furious", icon: "car", color: "bg-sky-700" },
+            { id: "matrix-franchise", title: "The Matrix", icon: "binary", color: "bg-green-800" },
+            { id: "conjuring-franchise", title: "The Conjuring", icon: "ghost", color: "bg-slate-600" }
+        ];
+        
+        const infinitySagaPhases = [
+            { id: "mcu-phase-one", title: "MCU: Phase One" },
+            { id: "mcu-phase-two", title: "MCU: Phase Two" },
+            { id: "mcu-phase-three", title: "MCU: Phase Three" },
+        ];
+
+        const multiverseSagaPhases = [
+            { id: "mcu-phase-four", title: "MCU: Phase Four" },
+            { id: "mcu-phase-five", title: "MCU: Phase Five" },
+            { id: "mcu-phase-six", title: "MCU: Phase Six" },
+        ];
+
+        const starWarsSaga = [
+            { id: "sw-original-trilogy", title: "Original Trilogy" },
+            { id: "sw-prequel-trilogy", title: "Prequel Trilogy" },
+            { id: "sw-sequel-trilogy", title: "Sequel Trilogy" },
+            { id: "sw-anthology", title: "Anthology / Spin-Off Films" },
+        ];
+
+        const dcuContinuities = [
+            { id: "dceu-released", title: "DCEU – Released Movies" },
+            { id: "dcu-reboot", title: "DC Universe (DCU) – Rebooted Continuity" }
+        ];
+
+        // --- RENDER FUNCTIONS ---
+        const sectionsContainer = document.getElementById('movie-sections');
+        const modal = document.getElementById('movie-modal');
+        const modalContent = document.getElementById('modal-content');
+        const franchisePage = document.getElementById('franchise-page');
+        const franchisePageGrid = document.getElementById('franchise-page-grid');
+        const mcuPage = document.getElementById('mcu-page');
+        const mcuPageContent = document.getElementById('mcu-page-content');
+        const starWarsPage = document.getElementById('star-wars-page');
+        const starWarsPageContent = document.getElementById('star-wars-page-content');
+        const dcuPage = document.getElementById('dcu-page');
+        const dcuPageContent = document.getElementById('dcu-page-content');
+        const fullListPage = document.getElementById('full-list-page');
+        const fullListContent = document.getElementById('full-list-content');
+        const fullListGrid = document.getElementById('full-list-grid');
+        const mainContent = document.getElementById('main-content');
+        const fullListTitle = document.getElementById('full-list-title');
+        
+        function createMovieCard(movie) {
+            return `
+                <div class="movie-card cursor-pointer group" data-movie-id="${movie.id}">
+                    <div class="relative">
+                        <img src="${movie.poster}" alt="${movie.title}" class="movie-poster w-full h-auto rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/500x750/0a0a0a/eab308?text=Image+Not+Found';">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+                            <i data-lucide="play-circle" class="w-16 h-16 text-yellow-500"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-yellow-500 font-bold px-2 py-1 rounded-md text-sm">${movie.pg}</div>
+                        <div class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white font-bold px-2 py-1 rounded-md text-sm flex items-center gap-1">
+                            <i data-lucide="star" class="w-4 h-4 text-yellow-500 fill-current"></i>
+                            <span>${movie.rating}</span>
+                        </div>
+                    </div>
+                    <h3 class="mt-4 text-lg font-semibold truncate group-hover:text-yellow-500 transition-colors">${movie.title}</h3>
+                    <p class="text-sm text-gray-400">${movie.year}</p>
+                </div>
+            `;
+        }
+        
+        function renderSections() {
+            let sectionsHTML = '';
+            
+            const renderCategory = (categoryConfig) => {
+                 let html = '';
+                 categoryConfig.forEach(section => {
+                    const maxItems = 5; // Set a consistent one-row limit for all sections
+
+                    const moviesForSection = movies.filter(movie => movie.category === section.id || (movie.category && movie.category.includes(section.id)));
+                    if (moviesForSection.length > 0) {
+                        const isTruncated = moviesForSection.length > maxItems;
+                        const itemsToShow = isTruncated ? moviesForSection.slice(0, maxItems) : moviesForSection;
+
+                        html += `
+                            <section id="${section.id}">
+                                <div class="flex justify-between items-center mb-8">
+                                    <h2 class="text-3xl font-bold">${section.title}</h2>
+                                    ${isTruncated ? `
+                                    <button class="see-all-btn flex items-center gap-2 text-yellow-500 font-semibold hover:text-yellow-400 transition-colors" data-category-id="${section.id}" data-category-title="${section.title}">
+                                        <span>See All</span>
+                                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                                    </button>` : ''}
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                                    ${itemsToShow.map(createMovieCard).join('')}
+                                </div>
+                            </section>
+                        `;
+                    }
+                });
+                return html;
+            }
+            
+            sectionsHTML += renderCategory(sectionConfig);
+            sectionsContainer.innerHTML = sectionsHTML;
+            lucide.createIcons();
+        }
+
+        function renderMCUPage() {
+            let mcuHTML = '';
+            
+            mcuHTML += `<section class="mb-16">
+                         <div class="border-b-2 border-yellow-500/30 pb-4 mb-8">
+                             <h2 class="text-4xl font-extrabold text-white tracking-widest uppercase">The Infinity Saga</h2>
+                         </div>`;
+            
+            infinitySagaPhases.forEach(phase => {
+                const moviesForPhase = movies.filter(movie => movie.category === phase.id);
+                if(moviesForPhase.length > 0) {
+                    mcuHTML += `
+                        <div class="mb-12">
+                            <h3 class="text-2xl font-semibold text-yellow-500 mb-6">${phase.title}</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                                ${moviesForPhase.map(createMovieCard).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            mcuHTML += `</section>`;
+
+            mcuHTML += `<section class="mb-16">
+                         <div class="border-b-2 border-yellow-500/30 pb-4 mb-8">
+                             <h2 class="text-4xl font-extrabold text-white tracking-widest uppercase">The Multiverse Saga</h2>
+                         </div>`;
+
+            multiverseSagaPhases.forEach(phase => {
+                const moviesForPhase = movies.filter(movie => movie.category === phase.id);
+                if(moviesForPhase.length > 0) {
+                    mcuHTML += `
+                        <div class="mb-12">
+                            <h3 class="text-2xl font-semibold text-yellow-500 mb-6">${phase.title}</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                                ${moviesForPhase.map(createMovieCard).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            mcuHTML += `</section>`;
+            
+            mcuPageContent.innerHTML = mcuHTML;
+            lucide.createIcons();
+        }
+
+        function renderStarWarsPage() {
+            let swHTML = '';
+            starWarsSaga.forEach(trilogy => {
+                const moviesForTrilogy = movies.filter(movie => movie.category === trilogy.id);
+                if(moviesForTrilogy.length > 0) {
+                    swHTML += `
+                        <section class="mb-16">
+                             <div class="border-b-2 border-yellow-500/30 pb-4 mb-8">
+                                 <h2 class="text-4xl font-extrabold text-white tracking-widest uppercase">${trilogy.title}</h2>
+                             </div>
+                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                                 ${moviesForTrilogy.map(createMovieCard).join('')}
+                            </div>
+                        </section>
+                    `;
+                }
+            });
+            starWarsPageContent.innerHTML = swHTML;
+            lucide.createIcons();
+        }
+
+        function renderDCUPage() {
+            let dcuHTML = '';
+            dcuContinuities.forEach(era => {
+                const moviesForEra = movies.filter(movie => movie.category === era.id);
+                if (moviesForEra.length > 0) {
+                    dcuHTML += `
+                        <section class="mb-16">
+                             <div class="border-b-2 border-yellow-500/30 pb-4 mb-8">
+                                 <h2 class="text-4xl font-extrabold text-white tracking-widest uppercase">${era.title}</h2>
+                             </div>
+                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                                 ${moviesForEra.map(createMovieCard).join('')}
+                            </div>
+                        </section>
+                    `;
+                }
+            });
+            dcuPageContent.innerHTML = dcuHTML;
+            lucide.createIcons();
+        }
+
+        function renderFranchisePage() {
+            franchisePageGrid.innerHTML = franchiseData.map(franchise => `
+                <button class="franchise-btn flex flex-col items-center gap-4 group p-4 rounded-lg hover:bg-gray-800/50 transition-colors" data-franchise-id="${franchise.id}" data-franchise-title="${franchise.title}">
+                    <div class="w-24 h-24 rounded-full flex items-center justify-center ${franchise.color} group-hover:scale-110 transition-transform border-2 border-gray-700">
+                        <i data-lucide="${franchise.icon}" class="w-12 h-12 text-white"></i>
+                    </div>
+                    <span class="font-semibold text-lg group-hover:text-yellow-500 transition-colors">${franchise.title}</span>
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function showFranchisePage() {
+            franchisePage.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            franchisePage.querySelector('.page-enter').classList.add('page-enter-active');
+        }
+        
+        function hideFranchisePage() {
+            const content = franchisePage.querySelector('.page-enter');
+            content.classList.replace('page-enter-active', 'page-exit-active');
+            setTimeout(() => {
+                franchisePage.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                content.classList.remove('page-exit-active');
+            }, 300);
+        }
+
+        function showMCUPage() {
+            mcuPage.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            mcuPage.querySelector('.page-enter').classList.add('page-enter-active');
+        }
+
+        function hideMCUPage() {
+            const content = mcuPage.querySelector('.page-enter');
+            content.classList.replace('page-enter-active', 'page-exit-active');
+            setTimeout(() => {
+                mcuPage.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                content.classList.remove('page-exit-active');
+            }, 300);
+        }
+        
+        function showStarWarsPage() {
+            starWarsPage.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            starWarsPage.querySelector('.page-enter').classList.add('page-enter-active');
+        }
+
+        function hideStarWarsPage() {
+            const content = starWarsPage.querySelector('.page-enter');
+            content.classList.replace('page-enter-active', 'page-exit-active');
+            setTimeout(() => {
+                starWarsPage.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                content.classList.remove('page-exit-active');
+            }, 300);
+        }
+
+        function showDCUPage() {
+            dcuPage.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            dcuPage.querySelector('.page-enter').classList.add('page-enter-active');
+        }
+
+        function hideDCUPage() {
+            const content = dcuPage.querySelector('.page-enter');
+            content.classList.replace('page-enter-active', 'page-exit-active');
+            setTimeout(() => {
+                dcuPage.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                content.classList.remove('page-exit-active');
+            }, 300);
+        }
+
+         function showMovieModal(movieId) {
+    const movie = movies.find(m => m.id == movieId);
+    if (!movie) return;
+
+    const trailerHTML = (movie.trailerId && movie.trailerId !== "sample")
+        ? `<div class="mt-8 aspect-w-16 aspect-h-9">
+             <iframe class="rounded-lg w-full h-full" 
+                     src="https://www.youtube.com/embed/${movie.trailerId}" 
+                     title="YouTube video player" 
+                     frameborder="0" 
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                     allowfullscreen>
+             </iframe>
+           </div>`
+        : `<p class="mt-8 text-gray-400"></p>`;
+
+    const modalHTML = `
+        <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-1">
+                <img src="${movie.poster}" alt="${movie.title}" class="rounded-lg w-full" 
+                     onerror="this.onerror=null;this.src='https://placehold.co/500x750/0a0a0a/eab308?text=Image+Not+Found';">
+            </div>
+            <div class="md:col-span-2">
+                <h2 class="text-4xl font-bold text-yellow-500">${movie.title}</h2>
+                <div class="flex items-center gap-4 mt-4 text-gray-400 flex-wrap">
+                    <div class="flex items-center gap-1">
+                        <i data-lucide="star" class="w-5 h-5 text-yellow-500 fill-current"></i>
+                        <span class="font-bold text-lg text-white">${movie.rating}</span>
+                    </div>
+                    <span class="text-lg">|</span>
+                    <span class="font-semibold border px-2 py-1 rounded-md text-sm">${movie.pg}</span>
+                    <span class="text-lg">|</span>
+                    <span class="font-semibold text-lg text-white">${movie.year}</span>
+                    ${movie.universe ? `<span class="font-semibold bg-gray-700 text-yellow-500 px-2 py-1 rounded-md text-sm">${movie.universe}</span>` : ''}
+                    ${movie.seasons ? `<span class="font-semibold bg-sky-800 text-white px-2 py-1 rounded-md text-sm">${movie.seasons} Season${movie.seasons > 1 ? 's' : ''}</span>` : ''}
+                </div>
+                <p class="mt-6 text-gray-300 leading-relaxed">${movie.description}</p>
+                ${trailerHTML}
+                <div class="mt-12">
+                    <h3 class="text-2xl font-semibold mb-4">Comments</h3>
+                    <div id="comment-list" class="space-y-4 mb-6 max-h-48 overflow-y-auto">
+                        <div class="p-4 rounded-lg bg-gray-800 bg-opacity-50">
+                            <p class="font-bold">Prasen</p>
+                            <p class="text-gray-300 mt-1">This looks incredible! Can't wait to watch it.</p>
+                        </div>
+                    </div>
+                    <form id="comment-form">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <input type="text" id="comment-name" placeholder="Your Name" class="sm:col-span-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none" required>
+                            <input type="text" id="comment-text" placeholder="Add a comment..." class="sm:col-span-2 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none" required>
+                        </div>
+                        <button type="submit" class="mt-4 bg-yellow-500 text-black font-bold py-2 px-6 rounded-lg hover:bg-yellow-400 transition-colors">Post Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+
+    modalContent.innerHTML = modalHTML;
+    lucide.createIcons();
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    modalContent.classList.remove('page-exit', 'page-exit-active');
+    modalContent.classList.add('page-enter-active');
+
+    document.getElementById('close-modal').addEventListener('click', hideMovieModal);
+    document.getElementById('comment-form').addEventListener('submit', handleCommentSubmit);
+}
+
+function hideMovieModal() {
+    modalContent.classList.replace('page-enter-active', 'page-exit-active');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modalContent.innerHTML = "";  // ✅ Clear iframe so video stops
+        if (fullListPage.classList.contains('hidden') &&
+            franchisePage.classList.contains('hidden') &&
+            mcuPage.classList.contains('hidden') &&
+            starWarsPage.classList.contains('hidden') &&
+            dcuPage.classList.contains('hidden')) {
+            document.body.style.overflow = 'auto'; 
+        }
+    }, 300);
+}
+        
+        function handleCommentSubmit(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('comment-name');
+            const commentInput = document.getElementById('comment-text');
+            const commentList = event.target.closest('.mt-12').querySelector('#comment-list');
+            const name = nameInput.value.trim();
+            const text = commentInput.value.trim();
+            if (name && text) {
+                const newComment = document.createElement('div');
+                newComment.className = 'p-4 rounded-lg bg-gray-800 bg-opacity-50';
+                newComment.innerHTML = `<p class="font-bold">${name}</p><p class="text-gray-300 mt-1">${text}</p>`;
+                commentList.appendChild(newComment);
+                commentList.scrollTop = commentList.scrollHeight;
+                nameInput.value = '';
+                commentInput.value = '';
+            }
+        }
+
+        function showFullListPage(items, title) {
+            fullListGrid.innerHTML = items.map(createMovieCard).join('');
+            fullListTitle.textContent = title;
+            lucide.createIcons();
+            fullListPage.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            fullListContent.classList.remove('page-exit', 'page-exit-active');
+            fullListContent.classList.add('page-enter-active');
+        }
+
+        function hideFullListPage() {
+            fullListContent.classList.replace('page-enter-active', 'page-exit-active');
+            setTimeout(() => {
+                fullListPage.classList.add('hidden');
+                if (franchisePage.classList.contains('hidden') && mcuPage.classList.contains('hidden') && starWarsPage.classList.contains('hidden') && dcuPage.classList.contains('hidden')) {
+                   document.body.style.overflow = 'auto';
+                }
+            }, 300);
+        }
+        
+        // --- HERO CAROUSEL LOGIC ---
+        const heroCarouselContainer = document.getElementById('hero-carousel');
+        const heroCarouselContent = document.getElementById('hero-carousel-content');
+        const heroCarouselIndicators = document.getElementById('hero-carousel-indicators');
+        const heroPrevBtn = document.getElementById('hero-prev');
+        const heroNextBtn = document.getElementById('hero-next');
+        let currentSlide = 0;
+        let slideInterval;
+
+        const heroSlides = movies.filter(m => m.heroImage && m.id !== 7).slice(0, 6);
+
+        function renderHeroCarousel() {
+            heroCarouselContainer.innerHTML = heroSlides.map((slide, index) => `
+                <div class="carousel-slide ${index === 0 ? 'active' : ''}" style="background-image: url('${slide.heroImage}');"></div>
+            `).join('');
+            
+            heroCarouselIndicators.innerHTML = heroSlides.map((_, index) => `
+                <div class="carousel-indicator ${index === 0 ? 'active' : ''}" data-slide-to="${index}"></div>
+            `).join('');
+
+            updateHeroContent();
+        }
+
+        function updateHeroContent() {
+            const slide = heroSlides[currentSlide];
+            heroCarouselContent.innerHTML = `
+                <div class="hero-text-container">
+                    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight text-white hero-text-animate">${slide.title}</h1>
+                    <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto md:mx-0 hero-text-animate" style="animation-delay: 0.2s;">${slide.description.substring(0, 120)}...</p>
+                    <button class="mt-8 movie-card inline-flex items-center gap-2 bg-yellow-500 text-black font-bold py-3 px-8 rounded-lg text-lg hover:bg-yellow-400 transition-colors hero-text-animate" style="animation-delay: 0.4s;" data-movie-id="${slide.id}">
+                        <i data-lucide="info" class="w-6 h-6"></i>
+                        <span>View Details</span>
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function showSlide(index) {
+            const slides = heroCarouselContainer.querySelectorAll('.carousel-slide');
+            const indicators = heroCarouselIndicators.querySelectorAll('.carousel-indicator');
+            
+            if (!slides[currentSlide] || !indicators[currentSlide]) return;
+
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            
+            currentSlide = (index + slides.length) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+            
+            updateHeroContent();
+        }
+
+        function startSlideShow() {
+            stopSlideShow();
+            slideInterval = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 3000); 
+        }
+
+        function stopSlideShow() {
+            clearInterval(slideInterval);
+        }
+
+        // --- EVENT LISTENERS & INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderSections();
+            renderMCUPage();
+            renderStarWarsPage();
+            renderDCUPage();
+            renderFranchisePage();
+            renderHeroCarousel();
+            startSlideShow();
+
+            heroPrevBtn.addEventListener('click', () => { showSlide(currentSlide - 1); startSlideShow(); });
+            heroNextBtn.addEventListener('click', () => { showSlide(currentSlide + 1); startSlideShow(); });
+
+            heroCarouselIndicators.addEventListener('click', (e) => {
+                if (e.target.classList.contains('carousel-indicator')) {
+                    const slideTo = parseInt(e.target.dataset.slideTo);
+                    showSlide(slideTo);
+                    startSlideShow(); // Reset interval
+                }
+            });
+
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
+            });
+
+            document.getElementById('mcu-icon-btn').addEventListener('click', showMCUPage);
+            document.getElementById('close-mcu-page-btn').addEventListener('click', hideMCUPage);
+
+            document.getElementById('star-wars-icon-btn').addEventListener('click', showStarWarsPage);
+            document.getElementById('close-star-wars-page-btn').addEventListener('click', hideStarWarsPage);
+            
+            document.getElementById('dcu-icon-btn').addEventListener('click', showDCUPage);
+            document.getElementById('close-dcu-page-btn').addEventListener('click', hideDCUPage);
+
+            document.getElementById('franchises-nav-link').addEventListener('click', showFranchisePage);
+            document.getElementById('mobile-franchises-nav-link').addEventListener('click', showFranchisePage);
+            document.getElementById('close-franchise-page-btn').addEventListener('click', hideFranchisePage);
+
+            franchisePageGrid.addEventListener('click', (event) => {
+                const franchiseBtn = event.target.closest('.franchise-btn');
+                if (franchiseBtn) {
+                    const franchiseId = franchiseBtn.dataset.franchiseId;
+                    const franchiseTitle = franchiseBtn.dataset.franchiseTitle;
+                    const items = movies.filter(m => m.category && m.category.includes(franchiseId));
+                    hideFranchisePage();
+                    // Timeout to allow the hide animation to start before showing the next page
+                    setTimeout(() => showFullListPage(items, franchiseTitle), 100);
+                }
+            });
+
+            mainContent.addEventListener('click', (event) => {
+                const movieCard = event.target.closest('.movie-card');
+                if (movieCard) {
+                    showMovieModal(movieCard.dataset.movieId);
+                    return;
+                }
+                
+                const seeAllBtn = event.target.closest('.see-all-btn');
+                if(seeAllBtn) {
+                    const categoryId = seeAllBtn.dataset.categoryId;
+                    const categoryTitle = seeAllBtn.dataset.categoryTitle;
+                    const items = movies.filter(m => m.category && m.category.includes(categoryId));
+                    showFullListPage(items, categoryTitle);
+                }
+            });
+
+            const heroCarouselContent = document.getElementById('hero-carousel-content');
+
+heroCarouselContent.addEventListener('click', (event) => {
+    const movieCard = event.target.closest('.movie-card');
+    if (movieCard) {
+        showMovieModal(movieCard.dataset.movieId);
+    }
+});
+            
+            mcuPageContent.addEventListener('click', (event) => {
+                const movieCard = event.target.closest('.movie-card');
+                if (movieCard) showMovieModal(movieCard.dataset.movieId);
+            });
+            
+            starWarsPageContent.addEventListener('click', (event) => {
+                const movieCard = event.target.closest('.movie-card');
+                if (movieCard) showMovieModal(movieCard.dataset.movieId);
+            });
+            
+            dcuPageContent.addEventListener('click', (event) => {
+                const movieCard = event.target.closest('.movie-card');
+                if (movieCard) showMovieModal(movieCard.dataset.movieId);
+            });
+
+            fullListGrid.addEventListener('click', (event) => {
+                const movieCard = event.target.closest('.movie-card');
+                if (movieCard) showMovieModal(movieCard.dataset.movieId);
+            });
+
+            modal.addEventListener('click', (event) => { if (event.target === modal) hideMovieModal(); });
+            
+            document.getElementById('show-parsen-suggestions-btn').addEventListener('click', () => {
+                const items = movies.filter(m => m.category === 'parsen-suggestions');
+                showFullListPage(items, "Parsen's Personal Suggestions");
+            });
+            document.getElementById('show-bonka-suggestions-btn').addEventListener('click', () => {
+                const items = movies.filter(m => m.category === 'bonka-suggestions');
+                showFullListPage(items, "Bonka's Personal Suggestions");
+            });
+            document.getElementById('show-argha-suggestions-btn').addEventListener('click', () => {
+                const items = movies.filter(m => m.category === 'argha-suggestions');
+                showFullListPage(items, "Argha's Personal Suggestions");
+            });
+
+            document.getElementById('close-full-list-btn').addEventListener('click', hideFullListPage);
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    if (!modal.classList.contains('hidden')) hideMovieModal();
+                    else if (!fullListPage.classList.contains('hidden')) hideFullListPage();
+                    else if (!franchisePage.classList.contains('hidden')) hideFranchisePage();
+                    else if (!mcuPage.classList.contains('hidden')) hideMCUPage();
+                    else if (!starWarsPage.classList.contains('hidden')) hideStarWarsPage();
+                    else if (!dcuPage.classList.contains('hidden')) hideDCUPage();
+                }
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const allSections = document.querySelectorAll('main section');
+            window.addEventListener('scroll', () => {
+                let current = 'home';
+                allSections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if(pageYOffset >= sectionTop - 100){ current = section.getAttribute('id'); }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if(link.getAttribute('href')?.substring(1) === current) { link.classList.add('active'); }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
