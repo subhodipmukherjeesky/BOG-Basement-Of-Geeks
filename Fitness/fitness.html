@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitHub - Your Ultimate Fitness Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles for Glass Effect, Scrollbar, and Animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0D0D0D;
+            color: #E0E0E0;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(57, 255, 20, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .hero-green {
+            color: #39FF14;
+        }
+
+        .hero-green-bg {
+            background-color: #39FF14;
+        }
+        
+        .hero-green-border {
+            border-color: #39FF14;
+        }
+
+        .section-title {
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #39FF14;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2ccf0f;
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            overflow: hidden;
+            position: relative;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Navigation -->
+    <header class="bg-black/80 backdrop-blur-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-black hero-green">FitHub</a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home-workouts" class="hover:hero-green transition">Home</a>
+                <a href="#yoga" class="hover:hero-green transition">Yoga</a>
+                <a href="#gym-workouts" class="hover:hero-green transition">Gym</a>
+                <a href="#nutrition" class="hover:hero-green transition">Nutrition</a>
+                <a href="#recipes" class="hover:hero-green transition">Recipes</a>
+                <a href="#tips" class="hover:hero-green transition">Tips</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-2">
+            <a href="#home-workouts" class="block hover:hero-green transition">Home</a>
+            <a href="#yoga" class="block hover:hero-green transition">Yoga</a>
+            <a href="#gym-workouts" class="block hover:hero-green transition">Gym</a>
+            <a href="#nutrition" class="block hover:hero-green transition">Nutrition</a>
+            <a href="#recipes" class="block hover:hero-green transition">Recipes</a>
+            <a href="#tips" class="block hover:hero-green transition">Tips</a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <!-- Hero Section with Carousel -->
+        <section id="start" class="relative text-white overflow-hidden">
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <!-- Slide 1: Home Workout -->
+                    <div class="carousel-slide relative h-[70vh] flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=2069&auto=format&fit=crop" alt="Home Workout" class="absolute inset-0 w-full h-full object-cover opacity-30">
+                        <div class="relative z-10 text-center p-4">
+                            <h1 class="text-4xl md:text-6xl font-black mb-4 section-title">Train Anywhere, Anytime.</h1>
+                            <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8">No gym? No problem. Discover effective workouts you can do from the comfort of your home.</p>
+                            <a href="#home-workouts" class="hero-green-bg text-black font-bold py-3 px-8 rounded-lg hover:bg-opacity-80 transition text-lg">Start Now</a>
+                        </div>
+                    </div>
+                    <!-- Slide 2: Yoga -->
+                    <div class="carousel-slide relative h-[70vh] flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2120&auto=format&fit=crop" alt="Yoga" class="absolute inset-0 w-full h-full object-cover opacity-30">
+                        <div class="relative z-10 text-center p-4">
+                            <h1 class="text-4xl md:text-6xl font-black mb-4 section-title">Find Your Inner Peace.</h1>
+                            <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8">Connect your mind, body, and soul with our guided yoga and meditation sessions.</p>
+                             <a href="#yoga" class="hero-green-bg text-black font-bold py-3 px-8 rounded-lg hover:bg-opacity-80 transition text-lg">Find Balance</a>
+                        </div>
+                    </div>
+                    <!-- Slide 3: Gym Workout -->
+                    <div class="carousel-slide relative h-[70vh] flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975&auto=format&fit=crop" alt="Gym Workout" class="absolute inset-0 w-full h-full object-cover opacity-30">
+                        <div class="relative z-10 text-center p-4">
+                            <h1 class="text-4xl md:text-6xl font-black mb-4 section-title">Unleash Your Strength.</h1>
+                            <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8">Crush your goals with structured gym workout plans for all fitness levels.</p>
+                            <a href="#gym-workouts" class="hero-green-bg text-black font-bold py-3 px-8 rounded-lg hover:bg-opacity-80 transition text-lg">Build Muscle</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="prevBtn" class="absolute top-1/2 left-4 transform -translate-y-1/2 p-2 rounded-full glass-card hover:bg-opacity-20">&lt;</button>
+            <button id="nextBtn" class="absolute top-1/2 right-4 transform -translate-y-1/2 p-2 rounded-full glass-card hover:bg-opacity-20">&gt;</button>
+        </section>
+
+        <!-- Home Workouts Section -->
+        <section id="home-workouts" class="py-20 px-6 container mx-auto">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Home <span class="hero-green section-title">Workouts</span></h2>
+                <button class="see-all-btn border-2 hero-green-border hero-green font-semibold py-2 px-5 rounded-lg hover:hero-green-bg hover:text-black transition" data-section="home-workouts">See All</button>
+            </div>
+            <div id="home-workouts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Yoga Section -->
+        <section id="yoga" class="py-20 px-6 container mx-auto">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Yoga & <span class="hero-green section-title">Meditation</span></h2>
+                <button class="see-all-btn border-2 hero-green-border hero-green font-semibold py-2 px-5 rounded-lg hover:hero-green-bg hover:text-black transition" data-section="yoga">See All</button>
+            </div>
+            <div id="yoga-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Gym Workouts Section -->
+        <section id="gym-workouts" class="py-20 px-6 container mx-auto">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Gym <span class="hero-green section-title">Workouts</span></h2>
+                 <button class="see-all-btn border-2 hero-green-border hero-green font-semibold py-2 px-5 rounded-lg hover:hero-green-bg hover:text-black transition" data-section="gym-workouts">See All</button>
+            </div>
+            <div id="gym-workouts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Nutrition Section -->
+        <section id="nutrition" class="py-20 px-6 container mx-auto">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Nutrition <span class="hero-green section-title">Guides</span></h2>
+                 <button class="see-all-btn border-2 hero-green-border hero-green font-semibold py-2 px-5 rounded-lg hover:hero-green-bg hover:text-black transition" data-section="nutrition">See All</button>
+            </div>
+            <div id="nutrition-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Healthy Recipes Section -->
+        <section id="recipes" class="py-20 px-6 container mx-auto">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Healthy & Delicious <span class="hero-green section-title">Recipes</span></h2>
+                <button class="see-all-btn border-2 hero-green-border hero-green font-semibold py-2 px-5 rounded-lg hover:hero-green-bg hover:text-black transition" data-section="recipes">See All</button>
+            </div>
+            <div id="recipes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Tips and Habits Section -->
+        <section id="tips" class="py-20 px-6 container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Live a <span class="hero-green section-title">Healthier Life</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Fitness Tips -->
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-4 hero-green">Fitness Tips</h3>
+                    <ul class="space-y-3 list-disc list-inside">
+                        <li>Stay consistent with your workouts.</li>
+                        <li>Listen to your body and rest when needed.</li>
+                        <li>Incorporate both cardio and strength training.</li>
+                        <li>Proper form is more important than heavy weights.</li>
+                        <li>Stay hydrated throughout the day.</li>
+                    </ul>
+                </div>
+                <!-- Healthy Habits -->
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-4 hero-green">Healthy Habits</h3>
+                    <ul class="space-y-3 list-disc list-inside">
+                        <li>Get 7-9 hours of quality sleep per night.</li>
+                        <li>Eat a balanced diet rich in whole foods.</li>
+                        <li>Practice mindfulness or meditation daily.</li>
+                        <li>Take regular breaks if you have a desk job.</li>
+                        <li>Limit processed foods and sugary drinks.</li>
+                    </ul>
+                </div>
+                <!-- What To Do / Not To Do -->
+                 <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-4 hero-green">Do's & Don'ts</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold mb-2 text-white">What To Do</h4>
+                             <ul class="space-y-2 list-disc list-inside text-sm">
+                                <li>Warm-up before exercise</li>
+                                <li>Cool down and stretch after</li>
+                                <li>Track your progress</li>
+                                <li>Set realistic goals</li>
+                             </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2 text-white">What Not To Do</h4>
+                             <ul class="space-y-2 list-disc list-inside text-sm">
+                                 <li>Overtrain your body</li>
+                                 <li>Skip meals</li>
+                                 <li>Compare yourself to others</li>
+                                 <li>Ignore pain signals</li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- "See All" Page Container (Initially Hidden) -->
+    <div id="see-all-page" class="hidden min-h-screen">
+        <div class="container mx-auto px-6 py-12">
+            <div class="flex justify-between items-center mb-12">
+                <h2 id="see-all-title" class="text-3xl md:text-4xl font-bold"></h2>
+                <button id="back-to-main" class="hero-green-bg text-black font-semibold py-2 px-5 rounded-lg hover:bg-opacity-80 transition">&larr; Back</button>
+            </div>
+            <div id="see-all-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Dynamically populated content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 border-t border-gray-800 mt-20">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p class="text-xl font-bold hero-green mb-2">FitHub</p>
+            <p>&copy; 2025 FitHub. All Rights Reserved.</p>
+            <p class="text-sm mt-2">Your journey to a healthier life starts here.</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- DATA ---
+        // This is where all the workout, recipe, etc., data is stored.
+        // In a real application, this would come from a database.
+        const allData = {
+            "home-workouts": {
+                title: "Home Workouts",
+                items: [
+                    { title: "Full Body HIIT (Under 18)", category: "Teens", desc: "A high-energy, fun workout to boost metabolism.", videoUrl: "http://www.youtube.com/watch?v=cbKkB3POqaY", imageUrl: "https://www.indiancrestpeds.com/wp-content/uploads/2022/10/Quick-Exercises-for-Kids-Teens.jpg" },
+                    { title: "Core Strength (Under 18)", category: "Teens", desc: "Build a strong core with these engaging exercises.", videoUrl: "http://www.youtube.com/watch?v=jYfda_ccTjc", imageUrl: "https://post.healthline.com/wp-content/uploads/2020/11/FEmale-Fitness-Crunch-Abs-1296x728-Header.jpg" },
+                    { title: "Bodyweight Strength (18+)", category: "Adults", desc: "Build muscle using just your body weight.", videoUrl: "http://www.youtube.com/watch?v=YjLni7LsycM", imageUrl: "https://i0.wp.com/www.muscleandfitness.com/wp-content/uploads/2019/04/triceps-pushup-lean-muscular.jpg?quality=86&strip=all" },
+                    { title: "Cardio Blast (18+)", category: "Adults", desc: "Get your heart rate up and burn calories.", videoUrl: "http://www.youtube.com/watch?v=ZllXIKITzfg", imageUrl: "https://www.shutterstock.com/image-photo/athletic-female-gym-exercises-battle-600nw-1102455683.jpg" },
+                    { title: "Low-Impact Cardio (60+)", category: "Seniors", desc: "Gentle on the joints, great for the heart.", videoUrl: "http://www.youtube.com/watch?v=s5FNlnEuux4", imageUrl: "https://www.draliabadi.com/wp-content/uploads/2021/08/exercise-over-60-lg.jpg" },
+                    { title: "Mobility & Flexibility (60+)", category: "Seniors", desc: "Improve your range of motion and reduce stiffness.", videoUrl: "http://www.youtube.com/watch?v=yI4hnt0IXDw", imageUrl: "https://primarycaredoctormiami.com/wp-content/uploads/2024/07/mobility-exercises-for-women-over-60.webp" },
+                    { title: "Advanced Push-ups", category: "Adults", desc: "Challenge your upper body strength.", videoUrl: "http://www.youtube.com/watch?v=_YrJc-kTYA0", imageUrl: "https://i0.wp.com/www.muscleandfitness.com/wp-content/uploads/2019/10/Man-Doing-One-Arm-Pushup.jpg?quality=86&strip=all" },
+                    { title: "Jump Squats", category: "Teens", desc: "Explosive power for your legs.", videoUrl: "http://www.youtube.com/watch?v=DeTBwEL4m7s", imageUrl: "https://media.istockphoto.com/id/1363074983/photo/fit-woman-exercising-doing-jump-squat-fitness-female-athlete.jpg?s=612x612&w=0&k=20&c=pcudxMguEvTT8gKD2kh9eW1hcZDXZYJ7ya2dolB4MHA=" },
+                    { title: "Plank Variations", category: "Adults", desc: "Master the plank with these challenging variations.", videoUrl: "http://www.youtube.com/watch?v=bHOteDDCrLs", imageUrl: "https://media.hearstapps.com/loop/wh-loops-day-2-taylor-110-sideplank-v1-1675239665.mp4/poster.jpg" },
+                    { title: "Glute Bridges", category: "Adults", desc: "Activate and strengthen your glutes.", videoUrl: "http://www.youtube.com/watch?v=Q_Bpj91Yiis", imageUrl: "https://res.cloudinary.com/peloton-cycle/image/fetch/c_fill,dpr_1.0,w_1280,h_720,x_260,y_240/f_auto/q_auto/https://images.ctfassets.net/6ilvqec50fal/5bBVV3oGbsXDq0ZH5Qjy1o/be49db0e2372a3f6b98345ace630d330/glute-bridge.jpg" }
+                ]
+            },
+            "yoga": {
+                title: "Yoga & Meditation",
+                items: [
+                    { title: "Morning Yoga Flow (All Ages)", category: "All Ages", desc: "Start your day with energy and focus.", videoUrl: "http://www.youtube.com/watch?v=CM43AZaRXNw", imageUrl: "https://m.media-amazon.com/images/I/71GaNbjybXL._UF894,1000_QL80_.jpg" },
+                    { title: "Bedtime Yoga (All Ages)", category: "All Ages", desc: "Relax and unwind for a restful sleep.", videoUrl: "http://www.youtube.com/watch?v=cRo0ss2Kc3o", imageUrl: "https://cdn.pixabay.com/photo/2019/09/03/10/59/sunset-4449163_960_720.jpg" },
+                    { title: "Yoga for Beginners (Teens)", category: "Teens", desc: "Learn the fundamental poses of yoga.", videoUrl: "http://www.youtube.com/watch?v=7kgZnJqzNaU", imageUrl: "https://media.yogauonline.com/app/uploads/2023/08/06222401/0-Benefits-of-yoga-for-kids-is-shown-with-kids-sitting-quietly-in-Easy-Sitting-Pose.webp" },
+                    { title: "Power Yoga (18+)", category: "Adults", desc: "A dynamic and challenging yoga workout.", videoUrl: "http://www.youtube.com/watch?v=e8TuZbVK3h8", imageUrl: "https://m.media-amazon.com/images/I/51xewkGHEwL.jpg" },
+                    { title: "Chair Yoga (60+)", category: "Seniors", desc: "Accessible yoga poses using a chair for support.", videoUrl: "http://www.youtube.com/watch?v=1DYH5ud3zHo", imageUrl: "https://domf5oio6qrcr.cloudfront.net/medialibrary/16341/conversions/gettyimages-1314539036-thumb.jpg" },
+                    { title: "Mindful Meditation", category: "All Ages", desc: "A 10-minute guided meditation for clarity.", videoUrl: "http://www.youtube.com/watch?v=vj0JDwQLof4", imageUrl: "https://www.devanaman.com/wp-content/uploads/2022/01/5184243.jpg" }
+                ]
+            },
+            "gym-workouts": {
+                title: "Gym Workouts",
+                items: [
+                    { title: "Full Body Strength (Men)", category: "Men", desc: "A balanced workout hitting all major muscle groups.", videoUrl: "http://www.youtube.com/watch?v=czkGj5vJEFQ", imageUrl: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=1974&auto=format&fit=crop" },
+                    { title: "Upper Body Power (Men)", category: "Men", desc: "Focus on building a powerful chest, back, and arms.", videoUrl: "http://www.youtube.com/watch?v=wCi78-7lQr0", imageUrl: "https://images.unsplash.com/photo-1532029837206-abbe2b7620e3?q=80&w=1974&auto=format&fit=crop" },
+                    { title: "Leg Day Domination (Men)", category: "Men", desc: "Build strength and size in your lower body.", videoUrl: "http://www.youtube.com/watch?v=H6mRkx1x77k", imageUrl: "https://shop.bodybuilding.com/cdn/shop/articles/leg-workouts-for-men-get-thicker-quads-glutes-and-hams-986493.jpg?v=1737673309" },
+                    { title: "Full Body Toning (Women)", category: "Women", desc: "Sculpt and tone your entire body with this routine.", videoUrl: "http://www.youtube.com/watch?v=cNYy_t-fPzs", imageUrl: "https://cdn.muscleandstrength.com/sites/default/files/styles/800x500/public/lean_woman_doing_dumbbell_row.jpg?itok=eU6elx6n" },
+                    { title: "Glute & Core Focus (Women)", category: "Women", desc: "Target your glutes and core for a strong physique.", videoUrl: "http://www.youtube.com/watch?v=KQ6b-_dC1Mo", imageUrl: "https://www.onnit.com/cdn/shop/articles/gabiopener_2_a993bd86-e61f-43a7-b565-a59373ea1fe2.jpg?v=1755267682&width=1260" },
+                    { title: "Cardio & Conditioning (Women)", category: "Women", desc: "Improve endurance and overall fitness.", videoUrl: "http://www.youtube.com/watch?v=3-_cOnVk0N4", imageUrl: "https://coac.swellclubs.com/wp-content/uploads/2024/05/coac-cardio-classes-header.jpg" }
+                ]
+            },
+            "nutrition": {
+                title: "Nutrition Guides",
+                items: [
+                    { title: "Understanding Macronutrients", category: "Guide", desc: "Learn about proteins, carbs, and fats.", videoUrl: "http://www.youtube.com/watch?v=7HXkkanqPKA", imageUrl: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=2070&auto=format&fit=crop" },
+                    { title: "Hydration 101", category: "Guide", desc: "The importance of water for your health.", videoUrl: "http://www.youtube.com/watch?v=9iMGFqMmUFs", imageUrl: "https://www.mddietclinic.com/wp-content/uploads/2023/04/shutterstock_1548860402.jpg" },
+                    { title: "Meal Prepping for Beginners", category: "Guide", desc: "Save time and eat healthier with meal prep.", videoUrl: "http://www.youtube.com/watch?v=NO-EbXMB4gc", imageUrl: "https://images.unsplash.com/photo-1543353071-873f17a7a088?q=80&w=2070&auto=format&fit=crop" },
+                    { title: "Healthy Snacking Ideas", category: "Guide", desc: "Nutritious snacks to keep you energized.", videoUrl: "http://www.youtube.com/watch?v=wZcqvEnxnmE", imageUrl: "https://grazia.wwmindia.com/content/2022/jan/smart-snacking.jpg" },
+                    { title: "Post-Workout Nutrition", category: "Guide", desc: "What to eat after exercise for optimal recovery.", videoUrl: "http://www.youtube.com/watch?v=An0yx-10fes", imageUrl: "https://www.nifs.org/hs-fs/hubfs/GettyImages-1423997728%20(1).jpg?width=422&height=281&name=GettyImages-1423997728%20(1).jpg" },
+                    { title: "Reading Food Labels", category: "Guide", desc: "Become a savvy shopper and make informed choices.", videoUrl: "http://www.youtube.com/watch?v=R-o-83k8dP0", imageUrl: "https://www.virginiacancerspecialists.com/wp-content/uploads/2023/05/Nutrition-Food-Labels-scaled.jpeg" }
+                ]
+            },
+            "recipes": {
+                title: "Healthy & Delicious Recipes",
+                items: [
+                    { title: "HIGH Protein Kala Chana", category: "Meal", desc: "A delicious and easy-to-make healthy meal.", videoUrl: "https://youtu.be/TtK0UinxTE8?si=YkRUERtq_AHUlHsT", imageUrl: "https://www.indianveggiedelight.com/wp-content/uploads/2023/01/kala-chana-chaat-recipe-2.jpg" },
+                    { title: "52g Protein Chicken Wrap", category: "Meal", desc: "Perfect for a high-protein lunch.", videoUrl: "http://www.youtube.com/watch?v=eXXsfN0tA9c", imageUrl: "https://insanelygoodrecipes.com/wp-content/uploads/2024/09/grilled-chicken-wrap-featured-500x500.jpg" },
+                    { title: "Healthy 2-Min Brownies", category: "Dessert", desc: "A quick and guilt-free dessert.", videoUrl: "https://youtu.be/fBixIAGsjww?si=sEcqWN0EZaxKuvdQ", imageUrl: "https://www.runningwithspoons.com/wp-content/uploads/2016/01/Healthy-Two-Minute-Brownie2-1-683x900.jpg" },
+                    { title: "Lemon Pepper Chicken", category: "Meal", desc: "Inspiration for your next healthy meal.", videoUrl: "https://youtu.be/HIfMIJtXtpw?si=VeiVV3IHU30w9CPf", imageUrl: "https://www.spoonfulofflavor.com/wp-content/uploads/2022/06/grilled-lemon-pepper-chicken.jpg" },
+                    { title: "Quick Healthy Dinners", category: "Meal", desc: "Get dinner on the table in 20 minutes.", videoUrl: "https://youtu.be/BEzASBGeEIM?si=BwZTrKEyQdghMxhD", imageUrl: "https://www.feastingathome.com/wp-content/uploads/2024/01/Moroccan-Chickpea-Bowl-4.jpg" },
+                    { title: "Healthy Egg Recipe ", category: "Meal", desc: "A delicious and easy-to-make healthy meal.", videoUrl: "https://youtu.be/dLairfd8bZU?si=2wf6ASU2VC70g6eX", imageUrl: "https://myfoodbook.com.au/sites/default/files/styles/card_c_molo/public/recipe_photo/Eggs20151375_1.jpg" },
+                    { title: "OVERNIGHT OATS", category: "Meal", desc: "A delicious and easy-to-make healthy .", videoUrl: "https://youtu.be/NeBf5ewmI0A?si=CcNVsNY5mMhHKS2P", imageUrl: "https://cdn.loveandlemons.com/wp-content/uploads/2022/09/overnight-oats.jpg" },
+                    { title: "Healthy Recipes for Weight loss", category: "Meal", desc: "A delicious and easy-to-make healthy meal.", videoUrl: "https://youtu.be/mJ1iIiVV0mM?si=ijw2ipaMyTnukBqF", imageUrl: "https://framerusercontent.com/images/0i99NTsvGcL3bDQSi0JBgD2um4.jpg?width=1066&height=800" },
+                    
+                    
+                ]
+            }
+        };
+
+        // --- MOBILE MENU ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- CAROUSEL ---
+        const track = document.querySelector('.carousel-track');
+        const slides = Array.from(track.children);
+        const nextButton = document.getElementById('nextBtn');
+        const prevButton = document.getElementById('prevBtn');
+        const slideWidth = slides[0].getBoundingClientRect().width;
+        let currentIndex = 0;
+        
+        const moveToSlide = (targetIndex) => {
+            track.style.transform = 'translateX(-' + slideWidth * targetIndex + 'px)';
+            currentIndex = targetIndex;
+        }
+
+        nextButton.addEventListener('click', e => {
+            const nextIndex = (currentIndex + 1) % slides.length;
+            moveToSlide(nextIndex);
+        });
+
+        prevButton.addEventListener('click', e => {
+            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+            moveToSlide(prevIndex);
+        });
+        
+        setInterval(() => {
+            const nextIndex = (currentIndex + 1) % slides.length;
+            moveToSlide(nextIndex);
+        }, 5000); // Auto-slide every 5 seconds
+
+        // --- DYNAMIC CONTENT RENDERING ---
+        const mainContent = document.getElementById('main-content');
+        const seeAllPage = document.getElementById('see-all-page');
+        const seeAllTitle = document.getElementById('see-all-title');
+        const seeAllGrid = document.getElementById('see-all-grid');
+        const backToMainBtn = document.getElementById('back-to-main');
+        
+        function createCard(item) {
+            return `
+                <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                    <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x225/0D0D0D/39FF14?text=Image+Not+Found';">
+                    <div class="p-5 flex flex-col flex-grow">
+                        <span class="hero-green-bg text-black text-xs font-bold px-2 py-1 rounded-full self-start mb-3">${item.category}</span>
+                        <h3 class="font-bold text-lg mb-2 flex-grow">${item.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4">${item.desc}</p>
+                        <a href="${item.videoUrl}" target="_blank" rel="noopener noreferrer" class="mt-auto text-center hero-green-bg text-black font-semibold py-2 px-4 rounded-lg hover:bg-opacity-80 transition">Watch Video</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function populateHomePage() {
+            Object.keys(allData).forEach(sectionKey => {
+                const grid = document.getElementById(`${sectionKey}-grid`);
+                if (grid) {
+                    const data = allData[sectionKey].items.slice(0, 4); // Show only first 4 items on homepage
+                    grid.innerHTML = data.map(createCard).join('');
+                }
+            });
+        }
+        
+        // Show "See All" page
+        document.querySelectorAll('.see-all-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const sectionKey = button.dataset.section;
+                const sectionData = allData[sectionKey];
+
+                seeAllTitle.innerHTML = `${sectionData.title.split(' ')[0]} <span class="hero-green section-title">${sectionData.title.split(' ').slice(1).join(' ')}</span>`;
+                seeAllGrid.innerHTML = sectionData.items.map(createCard).join('');
+
+                mainContent.classList.add('hidden');
+                seeAllPage.classList.remove('hidden');
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Go back to the main page
+        backToMainBtn.addEventListener('click', () => {
+            mainContent.classList.remove('hidden');
+            seeAllPage.classList.add('hidden');
+        });
+
+        // Initial population of the home page
+        populateHomePage();
+
+        // --- SMOOTH SCROLLING ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                     targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
+
+
+
