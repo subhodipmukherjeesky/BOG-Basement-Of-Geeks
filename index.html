@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Basement Of Geeks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="nav-inner container">
+      <a class="brand" href="#">
+        <span class="brand-logo" aria-hidden="true"><img src="assets/BOG_Logo/logovarient_4.png" alt="brand-logo"></span>
+        <span class="brand-text">Basement Of Geeks</span>
+      </a>
+
+      <nav class="primary-nav">
+        <a href="#about">About</a>
+        <a href="#topics">Topics</a>
+        <a href="#events">Events</a>
+      </nav>
+
+     <div class="signin-container">
+      <!-- Sign In -->
+      <a href="http://localhost:3000/signup" class="btn btn-ghost">Sign In</a>
+
+      <!-- Log In -->
+      <a href="http://localhost:3000/login" class="btn btn-login">Log In</a>
+    </div>
+
+    </div>
+  </header>
+
+
+
+
+  <!-- HERO / Carousel -->
+  <section class="hero" id="top">
+    <div class="hero-slides">
+      <!-- Slides generated dynamically by JS -->
+    </div>
+
+    <div class="hero-content container">
+      <h1 class="hero-title" id="heroTitle">
+        Watch out latest<br/>
+        Demon Slayer Movie<br/>
+        Meet Up Event in PVR!
+      </h1>
+
+      <!-- CTA link -->
+      <a href="#"  rel="noopener" class="btn btn-pill hero-cta" id="heroCta">
+        Book Your Slot Now
+      </a>
+    </div>
+
+    <div class="hero-arrows">
+      <button class="arrow" id="prevSlide" aria-label="Previous">
+        <span class="chev">‹</span>
+      </button>
+      <button class="arrow" id="nextSlide" aria-label="Next">
+        <span class="chev">›</span>
+      </button>
+    </div>
+  </section>
+
+
+
+<!-- What is BOG -->
+<!-- BOG FAQ -->
+<section class="what container" id="about">
+  <div class="what-grid">
+
+    <!-- About BOG Card -->
+    <div class="about-card">
+      <h2><span>FAQ!</span></h2>
+      <ul class="about-list">
+        <p>
+          Basement of Geeks (BOG) is a vibrant community for dreamers, creators, and geeks, uniting over anime, games, 
+          cosplay, music, books, fitness, and technology, fostering creativity and unforgettable shared experiences.
+        </p>
+        <li><span class="dot"></span> <strong>Community:</strong> A welcoming hub for geeks, dreamers, and creators.</li>
+        <li><span class="dot"></span> <strong>Passions:</strong> Gaming, movies, cosplay, books, tech, fitness & music.</li>
+        <li><span class="dot"></span> <strong>Events:</strong> Fun challenges, watch parties, gaming & discussions.</li>
+        <li><span class="dot"></span> <strong>Growth:</strong> Share ideas and collaborate with like-minded people.</li>
+        <li><span class="dot"></span> <strong>Friendship:</strong> Make meaningful connections and lasting memories.</li>
+      </ul>
+    </div>
+
+   <!-- BOG Feeds Card -->
+<div class="bogsnap1_card">
+  <div class="bogsnap1_header">
+    <h2 id="bogsnap1_title">BOG FEEDS</h2>
+  </div>
+
+  <!-- Image inside card -->
+  <div class="bogsnap1_imageWrapper" id="bogsnap1_imageWrapper">
+    <!-- JS will insert and crossfade images here -->
+  </div>
+
+  <div class="bogsnap1_content">
+    <p id="bogsnap1_desc">Loading the frosted experience...</p>
+
+    <div class="bogsnap1_progressContainer">
+      <div class="bogsnap1_progressBar" id="bogsnap1_progressBar"></div>
+    </div>
+
+    <p class="bogsnap1_stepCounter" id="bogsnap1_stepCounter">Step 1 of 5</p>
+    
+    <a href="BOG_Feeds/bogfeeds.html">
+      <button id="bogsnap1_btn">WATCH ALL</button>
+    </a>
+  </div>
+</div>
+
+</section>
+
+
+
+
+
+
+<!-- Find Your Choices -->
+<section class="people" id="topics">
+  <div class="container">
+    <h2>FIND YOUR TASTE!</h2>
+    <p class="sub">Pick a guild (or more). Each topic hosts channels, events, and challenges.</p>
+    <div class="card-grid" id="peopleGrid">
+      
+      
+      
+      <!-- POP CULTURE -->
+      <a class="topic-card" href="Movie/final.html" data-name="Animes Movies Web Series">
+        <div class="img"></div>
+        <div class="card-inner">
+          <h3>Animes Movies<br/>Web Series</h3>
+          <span class="pill pop">POP CULTURE</span>
+        </div>
+      </a>
+
+      <!-- GAMING -->
+      <a class="topic-card" href="Gaming-site-files/gaming.html" data-name="Gaming (E-Sports)">
+        <div class="img"></div>
+        <div class="card-inner">
+          <h3>Gaming<br/>(E-Sports)</h3>
+          <span class="pill gaming">GAMING</span>
+        </div>
+      </a>
+
+      <!-- TECH -->
+      <a class="topic-card" href="#" data-name="Tech &amp; AI (Coding)">
+        <div class="img"></div>
+        <div class="card-inner">
+          <h3>Tech &amp; AI<br/>(Coding)</h3>
+          <span class="pill tech">TECH</span>
+        </div>
+      </a>
+
+      
+
+      <!-- SPORTS -->
+      <a class="topic-card" href="Fitness/fitness.html" data-name="Sports & Fitness">
+        <div class="img"></div>
+        <div class="card-inner">
+          <h3>Sports<br/>&amp; Fitness</h3>
+          <span class="pill sports">SPORTS</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+  <!-- Upcoming Events -->
+  <section class="events" id="events">
+    <div class="container events-grid">
+      <div class="events-left">
+        <h2>UPCOMING EVENTS!</h2>
+        <p class="sub">Both online &amp; Offline Events are conducted.</p>
+
+        <div class="card-grid events-cards" id="eventsGrid">
+          <a class="event-card" href="BOG_Events/Event_1/eventpage1.html" data-name="Infinity Screen MeetUp">
+            <div class="img"></div>
+            <div class="event-inner">
+              <p class="date">15 SEP 2025</p>
+              <h4>DS Movie MeetUp</h4>
+            </div>
+          </a>
+
+          <a class="event-card" href="BOG_Events/Event_2/eventpage2.html" data-name="Art Competition">
+            <div class="img"></div>
+            <div class="event-inner">
+              <p class="date">12 OCT 2025</p>
+              <h4>BOG Gaming Fest</h4>
+            </div>
+          </a>
+
+          <a class="event-card" href="BOG_Events/Event_3/eventpage3.html" data-name="Coders MeetUp">
+            <div class="img"></div>
+            <div class="event-inner">
+              <p class="date">9 NOV 2025</p>
+              <h4>BOG Hackathon</h4>
+            </div>
+          </a>
+
+          <a class="event-card" href="BOG_Events/Event_4/eventpage4.html" data-name="Cricket Tournament">
+            <div class="img"></div>
+            <div class="event-inner">
+              <p class="date">21 DEC 2025</p>
+              <h4>Annual Sports Fest</h4>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Join Us Section -->
+  <section class="joinus" id="joinus">
+    <div class="container joinus-grid">
+      <div class="joinus-left">
+        <h2>JOIN US!</h2>
+        <p class="sub">Both online &amp; Offline Events are conducted.</p>
+
+        <!-- Volunteer & Events Section -->
+        <section class="volunteer-events-section">
+          <div class="ves-cards">
+        
+
+            <!-- Volunteer card -->
+            <div id="ves_vol_card" class="ves-card"
+                data-current="11" data-total="20"
+                style="background-image: url('assets/volunteer.jpg');">
+              <div class="ves-card-inner">
+                <h2 class="ves-title">Volunteer Zone</h2>
+                <p class="ves-sub">The action squad to manage activities, share ideas, and collaborate.</p>
+
+                <div class="ves-progress-outer">
+                  <div id="ves_vol_progress" class="ves-progress-inner"></div>
+                </div>
+                <div class="ves-count"><span id="ves_vol_count">0</span> / <span id="ves_vol_total">20</span></div>
+
+                <hr class="ves-divider">
+
+                <div class="ves-cta-row">
+                  <div class="ves-cta-text">Wanna be a volunteer?</div>
+                  <a id="ves_vol_button" class="ves-btn" href="#">Become a Volunteer</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Events card -->
+            <div id="ves_evt_card" class="ves-card"
+                data-current="40" data-total="100"
+                style="background-image: url('assets/eventhost.jpeg');">
+              <div class="ves-card-inner">
+                <h2 class="ves-title">Events Progress</h2>
+                <p class="ves-sub">We’re tracking goals publicly. Next milestone: 100 Events</p>
+
+                <div class="ves-progress-outer">
+                  <div id="ves_evt_progress" class="ves-progress-inner"></div>
+                </div>
+                <div class="ves-count"><span id="ves_evt_count">0</span> / <span id="ves_evt_total">100</span></div>
+
+                <hr class="ves-divider">
+
+                <div class="ves-cta-row">
+                  <div class="ves-cta-text">Want to host an event?</div>
+                  <a id="ves_evt_button" class="ves-btn" href="#">Submit a Session</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+
+  
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container foot-grid">
+      <div>
+        <a class="brand" href="#">
+          <span class="brand-logo" aria-hidden="true"> <img src="assets/BOG_Logo/logovarient_4.png" alt=""></span>
+          <span class="brand-text">BOG</span>
+        </a>
+        <p class="tiny">© 2025 Basement of Geeks. All Rights Reserved.</p>
+      </div>
+      <div class="links">
+        <a href="#">Contact Us</a>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+      <div class="links">
+        <a href="#">Account</a>
+        <a href="#">Help Centre</a>
+      </div>
+      <div class="social">
+        <a href="https://discord.gg/qhxtMmnyBh" aria-label="Discord" target="_blank" rel="noopener">
+          <img src="assets/Socials/discord.png" alt="Discord">
+        </a>
+        <a href="https://youtube.com/@yourchannel" aria-label="YouTube" target="_blank" rel="noopener">
+          <img src="assets/Socials/youtube.png" alt="YouTube">
+        </a>
+        <a href="https://instagram.com/basementofgeeksbog" aria-label="Instagram" target="_blank" rel="noopener">
+          <img src="assets/Socials/insta.png" alt="Instagram">
+        </a>
+        <a href="https://x.com/yourhandle" aria-label="X" target="_blank" rel="noopener">
+          <img src="assets/Socials/x.png" alt="X (Twitter)">
+        </a>
+        <a href="https://linkedin.com/in/yourprofile" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <img src="assets/Socials/linkedin.png" alt="LinkedIn">
+        </a>
+        <a href="https://facebook.com/yourpage" aria-label="Facebook" target="_blank" rel="noopener">
+          <img src="assets/Socials/facebook.png" alt="Facebook">
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
