@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Basement Of Geeks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="eventpage3.css" />
+</head>
+<body>
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="nav-inner container">
+      <a class="brand" href="#">
+        <span class="brand-logo" aria-hidden="true"><img src="assets/BOG_Logo/logovarient_4.png" alt="brand-logo"></span>
+        <span class="brand-text">Basement Of Geeks</span>
+      </a>
+
+    </div>
+  </header>
+
+  
+ <!-- Hero Image Section -->
+
+  <section id="bog-hero">
+      <div class="bog-hero-bg">
+        <img src="assets/codersmeetup.png" alt="" />
+      </div>
+
+      <div class="bog-container bog-hero-inner">
+        <div class="bog-hero-left">
+          <h1 class="bog-hero-title">
+            Think. Build. Innovate<br>
+            Unleash Your Coding Superpowers<br>
+            BOG Hackathon 2025!
+          </h1>
+        </div>
+
+        <aside class="bog-hero-cta">
+          <button id="bog-register-btn" class="bog-cta-button">
+            <span>CLICK HERE TO</span>
+            <strong>REGISTER YOUR SEAT</strong>
+          </button>
+
+          <!-- Auto-updating progress -->
+          <div class="bog-progress-wrap">
+            <div class="bog-progress-top">
+              <span>Seats Filled</span>
+              <span id="bog-progress-value">0%</span>
+            </div>
+            <div class="bog-progress-bar">
+              <div id="bog-progress-fill"></div>
+            </div>
+            <div class="bog-progress-bottom">
+              <span id="bog-seats-booked">0</span> / <span id="bog-seats-total">0</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Details Row -->
+    <section id="bog-details">
+      <div class="bog-container bog-details-grid">
+        <!-- Event Date -->
+        <div class="bog-card">
+          <h2 class="bog-card-title"><span class="card-icon">📅</span> EVENT DATE</h2>
+          <p id="bog-date-line"><strong>09 NOVEMBER 2025</strong></p>
+          <p id="bog-time-line">10:00 PM TO 5:00 PM</p>
+          <p id="bog-day-line">(MONDAY)</p>
+          <p id="bog-department" class="highlight-dept">BY TECH DEP</p>
+          <p class="bog-countdown" id="bog-countdown">⏳ Loading countdown...</p>
+        </div>
+
+        <!-- Info -->
+        <div class="bog-card">
+          <h2 class="bog-card-title"><span class="card-icon">ℹ️</span> INFO IN BRIEF</h2>
+          <p>
+            The event unites tech minds to innovate, code, and collaborate,
+            building impactful solutions for the future by Basement Of Geeks.
+          </p>
+          <ul class="bog-highlights">
+            <li>🧩 Real-world problem statements</li>
+            <li>🏆 Cash prizes & goodies for winners</li>
+            <li>☕ Free food & energy drinks</li>
+            <li>🤝 Networking with industry mentors</li>
+            <li>🎤 Panel talks & tech workshops</li>
+          </ul>
+        </div>
+
+        <!-- Venue -->
+        <div class="bog-card">
+          <h2 class="bog-card-title"><span class="card-icon">📍</span> VENUE LOCATION</h2>
+          <p class="bog-venue-name">BRAINWARE UNIVERSITY</p>
+          <address>
+            398, Ramkrishnapur Rd, near Jagadighata Market,<br>
+            Barasat, Kolkata, West Bengal 700125
+          </address>
+          <p class="bog-capacity">🎟 Seats Available: 120</p>
+          <div class="bog-map-cta">
+            <a id="bog-map-link" class="bog-link" target="_blank">
+              <span class="map-link-icon">🗺️</span> Google Map Location
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container foot-grid">
+      <div>
+        <a class="brand" href="#">
+          <span class="brand-logo" aria-hidden="true"> <img src="assets/BOG_Logo/logovarient_4.png" alt=""></span>
+          <span class="brand-text">BOG</span>
+        </a>
+        <p class="tiny">© 2025 Basement of Geeks. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="eventpage3.js"></script>
+</body>
+</html>
