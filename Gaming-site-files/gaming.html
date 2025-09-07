@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gamegrid - fellow gamers place</title>
+    <link rel="stylesheet" href="./stylegames.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="#" class="logo">Gamegrid</a>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#reviews">Featured</a></li>
+          <li><a href="#upcoming">Upcoming</a></li>
+          <li><a href="#">Spotlight</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      
+     <!-- HERO / Carousel -->
+
+      <section class="hero" id="top">
+        <div class="hero-slides">
+          <!-- Slides generated dynamically by JS -->
+        </div>
+
+        <div class="hero-content container">
+          <h1 class="hero-title" id="heroTitle">
+            Watch out latest<br/>
+            Demon Slayer Movie<br/>
+            Meet Up Event in PVR!
+          </h1>
+
+          <!-- CTA link -->
+          <a href="#"  rel="noopener" class="btn btn-pill hero-cta" id="heroCta">
+            Book Your Slot Now
+          </a>
+        </div>
+
+        <div class="hero-arrows">
+          <button class="arrow" id="prevSlide" aria-label="Previous">
+            <span class="chev">‹</span>
+          </button>
+          <button class="arrow" id="nextSlide" aria-label="Next">
+            <span class="chev">›</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="content-section" id="reviews">
+        <h2>Featured </h2>
+        <div class="movie-grid">
+          <div onclick="window.open('https://store.epicgames.com/en-US/p/valorant', '_blank')" class="movie-card">
+            <img
+              src="gaming-resources/Valorant.jpg"
+              alt="valorant poster"
+            />
+          
+            <div class="card-content">
+              <h3>Valorant</h3>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.5</div>
+              <p>FPS/E-Sports</p>
+            </div>
+          </div>
+          
+          <div onclick="window.open('https://store.steampowered.com/app/1623730/Palworld/', '_blank')"class="movie-card">
+            <img
+              src="gaming-resources/palworld.jpg"
+              alt="Palworld Poster"
+            />
+          
+            <div class="card-content">
+              <h3>Palworld</h3>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.8</div>
+              <p>Open world</p>
+            </div>
+          </div>
+
+          <div onclick="window.open('https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/', '_blank')"class="movie-card">
+            <img
+              src="gaming-resources/rdr2.jpg"
+              alt="Red dead redemption-2 Poster"
+            />
+            <div class="card-content">
+              <h3>Red dead redemption 2</h3>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.8</div>
+              <p>Story/Open world</p>
+            </div>
+          </div>
+
+          
+          <div onclick="window.open('https://store.steampowered.com/app/1815780/Asphalt_Legends/', '_blank')"class="movie-card">
+            <img
+              src="gaming-resources/asphalt-legends.jpg"
+              alt="Asphalt legends Poster"
+            />
+            <div class="card-content">
+              <h3>Asphalt Legends</h3>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.2</div>
+              <p>Racing</p>
+            </div>
+          </div>
+          <div onclick="window.open('https://store.steampowered.com/app/1245620/ELDEN_RING/', '_blank')"class="movie-card">
+            <img
+              src="gaming-resources/elden-ring.jpg"
+              alt="Elden-Ring Poster"
+            />
+            <div class="card-content">
+              <h3>Elden Ring</h3>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.6</div>
+              <p>RPG/Dark Souls</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section" id="upcoming">
+        <h2>Upcoming Titles</h2>
+        <div class="movie-grid">
+        
+          <div onclick="window.open('https://www.playstation.com/en-in/games/ghost-of-yotei/', '_blank')"class="movie-card upcoming">
+            <img
+              src="upcoming-resources/g-of-yotei.jpg"
+              alt="Upcoming Movie Poster"
+            />
+            <div class="release-date">Coming Oct 2-2025</div>
+            <div class="card-content">
+              <h3>Ghost of Yōtei</h3>
+              <p>Open World/Story Rich</p>
+              <P>PS5 exclusive</P>
+            </div>
+          </div>
+          <div onclick="window.open('https://store.steampowered.com/app/2807960/Battlefield_6/', '_blank')"class="movie-card upcoming">
+            <img
+              src="upcoming-resources/battlefield-6.jpg"
+              alt="Battelefield-6 Poster"
+            />
+            <div class="release-date">Coming Oct 10-2025</div>
+            <div class="card-content">
+              <h3>Battlefield-6</h3>
+              <p>Action/FPS/Multiplayer</p>
+            </div>
+          </div>
+          <div onclick="window.open('https://store.steampowered.com/app/3764200/Resident_Evil_Requiem/', '_blank')"class="movie-card upcoming">
+            <img
+              src="upcoming-resources/RE-9.jpg"
+              alt="Resident evil-9 Poster"
+            />
+            <div class="release-date">Coming Feb 27-2025</div>
+            <div class="card-content">
+              <h3>Resident Evil Requiem</h3>
+              <p>Survival-Horror</p>
+            </div>
+          </div>
+          <div onclick="window.open('https://www.rockstargames.com/VI', '_blank')"class="movie-card upcoming">
+            <img
+              src="upcoming-resources/Grand.webp"
+              alt="GTA-6 Poster"
+            />
+
+            <div class="release-date">Coming May 26-2026</div>
+            <div class="card-content">
+              <h3>Grand Theft Auto VI</h3>
+              <p>Open World/RPG</p>
+              <p>PS5, XBOX Series X|S</p>
+            </div>
+          </div>
+          <div onclick="window.open('https://www.thewitcher.com/sg/en/witcher4', '_blank')"class="movie-card upcoming">
+            <img
+              src="upcoming-resources/witcher-4.jpg"
+              alt="witcher-4 Poster"
+            />
+            <div class="release-date">Coming Late 2026</div>
+            <div class="card-content">
+              <h3>The Witcher IV</h3>
+              <p>RPG/Open world</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Join official Discord Server for more gaming stuffs.</p>
+      <div class="social-links">
+        <a href="https://discord.gg/qhxtMmnyBh" target="_blank"><i class="fa-brands fa-discord"></i></a>
+      </div>
+    </footer>
+
+  <script src="gaming.js"></script>
+
+  </body>
+</html>
